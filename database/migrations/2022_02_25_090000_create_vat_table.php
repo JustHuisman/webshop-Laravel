@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('vat', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('percentage');
+            $table->decimal('percentage');
             $table->timestamps();
             $table->softDeletes();
         });

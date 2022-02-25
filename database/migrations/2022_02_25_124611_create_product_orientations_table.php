@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('product_orientations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('orientation_id');
-            $table->foreign('orientation_id')->references('id')->on('orientation');
+            $table->foreign('orientation_id')->references('id')->on('orientations');
             $table->unsignedBigInteger('variation_id');
             $table->foreign('variation_id')->references('id')->on('product_variations');
             $table->timestamps();

@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('amount_sold');
-            $table->decimal('discount_percentage');
-            $table->unsignedBigInteger('vat_id');
-            $table->foreign('vat_id')->references('id')->on('vat');
+            $table->string('name', 50);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_statuses');
     }
 };

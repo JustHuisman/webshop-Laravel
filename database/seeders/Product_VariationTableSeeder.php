@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Product_VariationsTableSeeder extends Seeder
+class Product_VariationTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('first_name', 50);
             $table->string('last_name', 100);
             $table->string('email')->unique();
-            // $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('role');
             $table->foreign('role')->references('id')->on('roles');
-            // $table->rememberToken();
+            $table->rememberToken();
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->softDeletes();

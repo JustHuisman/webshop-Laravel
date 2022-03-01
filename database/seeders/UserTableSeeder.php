@@ -35,6 +35,6 @@ class UserTableSeeder extends Seeder
             'created_by'    => 1,
         ]);
 
-        \App\Models\User::factory(5)->create();
+        \App\Models\User::factory(50)->create();
     }
 }

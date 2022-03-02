@@ -28,7 +28,7 @@ class Product_OrientationTableSeeder extends Seeder
         ]);
 
         DB::table('product_orientations')->insert([
-            'orientation_id' => 3,
+            'orientation_id' => 1,
             'variation_id'   => 3,
             'created_at'     => now(),
         ]);

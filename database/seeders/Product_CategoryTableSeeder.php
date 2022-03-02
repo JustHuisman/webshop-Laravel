@@ -16,7 +16,7 @@ class Product_CategoryTableSeeder extends Seeder
     public function run()
     {
         DB::table('product_categories')->insert([
-            'product_id'  => 5,
+            'product_id'  => 3,
             'category_id' => 1,
             'created_at'  => now(),
         ]);

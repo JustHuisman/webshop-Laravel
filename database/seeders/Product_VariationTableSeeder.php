@@ -16,7 +16,7 @@ class Product_VariationTableSeeder extends Seeder
     public function run()
     {
         DB::table('product_variations')->insert([
-            'product_id' => 5,
+            'product_id' => 3,
             'stock'      => 12,
             'price'      => 10,
             'created_at' => now(),
@@ -30,7 +30,7 @@ class Product_VariationTableSeeder extends Seeder
         ]);
 
         DB::table('product_variations')->insert([
-            'product_id' => 3,
+            'product_id' => 2,
             'stock'      => 101,
             'price'      => 8.9,
             'created_at' => now(),

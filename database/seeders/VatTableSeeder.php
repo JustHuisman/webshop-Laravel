@@ -16,20 +16,20 @@ class VatTableSeeder extends Seeder
     public function run()
     {
         DB::table('vat')->insert([
-            'name'          => 'Star Wars',
+            'name'          => 'Algemeen tarief',
             'percentage'    => 21,
             'created_at'    => now(),
         ]);
 
         DB::table('vat')->insert([
-            'name'          => 'Batman',
-            'percentage'    => 19,
+            'name'          => 'Laag tarief',
+            'percentage'    => 9,
             'created_at'    => now(),
         ]);
 
         DB::table('vat')->insert([
-            'name'          => 'Spiderman',
-            'percentage'    => 9,
+            'name'          => 'Vrijstelling',
+            'percentage'    => 0,
             'created_at'    => now(),
         ]);
     }

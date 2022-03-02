@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class RoleTableSeeder extends Seeder
+class Address_TypeTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +15,18 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
-            'name'          => 'Admin',
+        DB::table('address_types')->insert([
+            'name'          => 'Vestigingsadres',
             'created_at'    => now(),
         ]);
 
-        DB::table('roles')->insert([
-            'name'          => 'Klant',
+        DB::table('address_types')->insert([
+            'name'          => 'Factuuradres',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('address_types')->insert([
+            'name'          => 'Transportadres',
             'created_at'    => now(),
         ]);
     }

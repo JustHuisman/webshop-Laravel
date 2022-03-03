@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,11 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::middleware('auth')->prefix('admin')->group(function() {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin');
+    Route::get('logout', [App\Http\Controllers\Admin\AdminController::class, 'logout'])->name('admin.logout');
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -23,7 +23,7 @@ class UserFactory extends Factory
             'email'             => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password'          => bcrypt('Gorilla1!'),
-            'role'              => random_int(1,2),
+            'role'              => 2,
             'remember_token'    => Str::random(10),
             'created_at'        => now(),
             'created_by'        => 1,

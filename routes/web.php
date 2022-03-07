@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\AdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +26,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
+Route::middleware('auth')->prefix('admin')->group(function() {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin');
+    Route::get('logout', [App\Http\Controllers\Admin\AdminController::class, 'logout'])->name('admin.logout');
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+});
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/tos', [HomeController::class, 'tos'])->name('tos');
 
@@ -36,4 +45,3 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/admin-products', [AdminController::class, 'products'])->name('admin-products');
 Route::get('/admin-users', [AdminController::class, 'users'])->name('admin-users');
 Route::get('/admin-returns', [AdminController::class, 'returns'])->name('admin-returns');
-

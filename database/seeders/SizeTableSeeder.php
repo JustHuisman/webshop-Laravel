@@ -17,16 +17,19 @@ class SizeTableSeeder extends Seeder
     {
         DB::table('sizes')->insert([
             'name'          => 'Groot',
+            'price'         => 15,
             'created_at'    => now(),
         ]);
 
         DB::table('sizes')->insert([
             'name'          => 'Middel',
+            'price'         => 10,
             'created_at'    => now(),
         ]);
 
         DB::table('sizes')->insert([
             'name'          => 'Klein',
+            'price'         => 5,
             'created_at'    => now(),
         ]);
 

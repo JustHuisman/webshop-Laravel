@@ -18,21 +18,18 @@ class Product_VariationTableSeeder extends Seeder
         DB::table('product_variations')->insert([
             'product_id' => 3,
             'stock'      => 12,
-            'price'      => 10,
             'created_at' => now(),
         ]);
 
         DB::table('product_variations')->insert([
             'product_id' => 1,
             'stock'      => 0,
-            'price'      => 24.99,
             'created_at' => now(),
         ]);
 
         DB::table('product_variations')->insert([
             'product_id' => 2,
             'stock'      => 101,
-            'price'      => 8.9,
             'created_at' => now(),
         ]);
 

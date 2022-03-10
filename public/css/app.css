@@ -11286,3 +11286,25 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.brand-img {
+  margin: 5px;
+  filter: saturate(90%);
+}
+
+.navbar-img {
+  margin: 7px;
+}
+
+li.nav-item.navbar-link.active {
+  text-shadow: 0px 0px 4px #ffffff;
+}
+
+footer {
+  color: gray;
+  text-align: center;
+}
+
+.footer-link {
+  color: gray;
+  margin: 10px;
+}

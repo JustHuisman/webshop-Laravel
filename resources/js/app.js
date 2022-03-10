@@ -1,5 +1,6 @@
 require('./bootstrap');
-
+import $ from 'jquery'
+window.$ = window.jQuery = $;
 window.Vue = require('vue').default;
 import VueResource from 'vue-resource';
 Vue.use(VueResource);

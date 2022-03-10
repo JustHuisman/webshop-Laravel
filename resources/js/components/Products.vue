@@ -20,17 +20,7 @@
         },
         data: function () {
             return {
-                // products: [
-                //     {
-                //         id: 1,
-                //         title: "test"
-                //     },
-                //     {
-                //         id: 2,
-                //         title: "test"
-                //     },
-                // ],
-                product: [],
+                products: [],
                 page: 1,
             };
         },
@@ -44,7 +34,7 @@
                         return res.json();
                     }).then(res => {
                         $.each(res.data, (key, value) => {
-                            this.Products.push(value);
+                            this.products.push(value);
                         });
                         $state.loaded();
                     });

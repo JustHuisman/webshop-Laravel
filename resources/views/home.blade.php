@@ -24,7 +24,9 @@
                         {{ __('You are logged in!') }}
                     </div>
                 </div>
-                <products></products>
+                <div class="container" style="margin-top:30px">
+                    <products></products>
+                </div>
             </div>
         </div>
     </div>

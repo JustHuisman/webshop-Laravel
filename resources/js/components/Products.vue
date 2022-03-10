@@ -2,13 +2,14 @@
     <div class="row">
         <div class="col-md-4 pt-3" v-for="product in products" v-bind:key="product.id">
             <div class="card">
-                <img :src="'/public/images/posters/landscape/' + product.id + '.jpg'" class="card-img-top" alt="...">
+                <img :src="'/images/posters/landscape/' + product.id + '.jpg'" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <input type="button" class="btn btn-primary" :disabled="product.stock === 0" @click="addToCart(product)" value="Order">
                 </div>
             </div>
         </div>
+        <infinite-loading @distance="1" @infinite="handleLoadMore"></infinite-loading>
     </div>
 </template>
 
@@ -19,22 +20,36 @@
         },
         data: function () {
             return {
-                products: [
-                    {
-                        id: 1,
-                        title: "test"
-                    },
-                    {
-                        id: 2,
-                        title: "test"
-                    },
-                ],
-            }
+                // products: [
+                //     {
+                //         id: 1,
+                //         title: "test"
+                //     },
+                //     {
+                //         id: 2,
+                //         title: "test"
+                //     },
+                // ],
+                product: [],
+                page: 1,
+            };
         },
         props: {
             
         },
         methods: {
+            handleLoadMore($state) {
+                this.$http.get('/products?page=' + this.page)
+                    .then(res => {
+                        return res.json();
+                    }).then(res => {
+                        $.each(res.data, (key, value) => {
+                            this.Products.push(value);
+                        });
+                        $state.loaded();
+                    });
+                this.page = this.page + 1;
+            },
             addToCart(product) {
                 this.$root.$emit('add-to-cart', product);
             },

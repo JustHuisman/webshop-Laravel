@@ -1,10 +1,15 @@
 require('./bootstrap');
 
 window.Vue = require('vue').default;
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('products', require('./components/Products.vue').default);
+Vue.component('InfiniteLoading', require('vue-infinite-loading'));
+
 Vue.component('product-filters', require('./components/ProductFilters.vue').default);
+
 
 //Make sure to have an instance of Terminal running: npm run watch
 //This will ensure vue gets compiled automatically

@@ -5472,19 +5472,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('ProductFilters Component mounted.');
+  },
+  data: function data() {
+    return {
+      categories: []
+    };
+  },
+  created: function created() {
+    var self = this; // Get all products calling function in controller (Ajax call)
+
+    axios({
+      method: 'GET',
+      url: 'home/categories',
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(function (response) {
+      self.categories = response.data.categories;
+    })["catch"](function (response) {});
   }
 });
 
@@ -39387,260 +39395,229 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("form", [
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c(
+          "form",
+          [
             _c("p", [_vm._v("Orientation")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterLandscape",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckDefault" },
-                },
-                [
-                  _vm._v(
-                    "\n                    Landscape\n                    "
-                  ),
-                ]
-              ),
-            ]),
+            _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterPortrait",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [_vm._v("\n                    Portrait\n                    ")]
-              ),
-            ]),
+            _vm._m(1),
             _vm._v(" "),
             _c("p", [_vm._v("Size")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterLarge",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckDefault" },
-                },
-                [_vm._v("\n                    Large\n                    ")]
-              ),
-            ]),
+            _vm._m(2),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterMedium",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [_vm._v("\n                    Medium\n                    ")]
-              ),
-            ]),
+            _vm._m(3),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterSmall",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [_vm._v("\n                    Small\n                    ")]
-              ),
-            ]),
+            _vm._m(4),
             _vm._v(" "),
             _c("p", [_vm._v("Price")]),
             _vm._v(" "),
-            _c("div", { staticClass: "input-group mb-3" }, [
-              _c("span", { staticClass: "input-group-text" }, [_vm._v("Min:")]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  "aria-label": "Minimum price",
-                  value: "0",
-                  id: "filterMinPrice",
-                },
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
-            ]),
+            _vm._m(5),
             _vm._v(" "),
-            _c("div", { staticClass: "input-group mb-3" }, [
-              _c("span", { staticClass: "input-group-text" }, [_vm._v("Max:")]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  "aria-label": "Maximum price",
-                  id: "filterMaxPrice",
-                },
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
-            ]),
+            _vm._m(6),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: { type: "checkbox", value: "", id: "filterPortrait" },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [
-                  _vm._v(
-                    "\n                    Discount only\n                    "
-                  ),
-                ]
-              ),
-            ]),
+            _vm._m(7),
             _vm._v(" "),
             _c("p", [_vm._v("Category")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterCategoryLorem",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckDefault" },
-                },
-                [_vm._v("\n                    Lorem\n                    ")]
-              ),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterCategoryIpsum",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [_vm._v("\n                    Ipsum\n                    ")]
-              ),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "",
-                  id: "filterCategoryBlablabla",
-                  checked: "",
-                },
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "flexCheckChecked" },
-                },
-                [
-                  _vm._v(
-                    "\n                    Blablabla\n                    "
+            _vm._l(_vm.categories, function (category) {
+              return _c("div", { key: category.id }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: {
+                      type: "checkbox",
+                      value: "",
+                      id: "filterCategoryLorem",
+                      checked: "",
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "flexCheckDefault" },
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(category.name) +
+                          "\n                        "
+                      ),
+                    ]
                   ),
-                ]
-              ),
-            ]),
+                ]),
+              ])
+            }),
             _vm._v(" "),
             _c(
               "button",
               { staticClass: "btn btn-primary", attrs: { type: "submit" } },
               [_vm._v("Search")]
             ),
-          ]),
-        ]),
+          ],
+          2
+        ),
       ]),
+    ]),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: {
+          type: "checkbox",
+          value: "",
+          id: "filterLandscape",
+          checked: "",
+        },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckDefault" } },
+        [_vm._v("\n                    Landscape\n                    ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: {
+          type: "checkbox",
+          value: "",
+          id: "filterPortrait",
+          checked: "",
+        },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
+        [_vm._v("\n                    Portrait\n                    ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", value: "", id: "filterLarge", checked: "" },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckDefault" } },
+        [_vm._v("\n                    Large\n                    ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", value: "", id: "filterMedium", checked: "" },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
+        [_vm._v("\n                    Medium\n                    ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", value: "", id: "filterSmall", checked: "" },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
+        [_vm._v("\n                    Small\n                    ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group mb-3" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("Min:")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          "aria-label": "Minimum price",
+          value: "0",
+          id: "filterMinPrice",
+        },
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group mb-3" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("Max:")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          "aria-label": "Maximum price",
+          id: "filterMaxPrice",
+        },
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-check" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", value: "", id: "filterPortrait" },
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
+        [_vm._v("\n                    Discount only\n                    ")]
+      ),
     ])
   },
 ]

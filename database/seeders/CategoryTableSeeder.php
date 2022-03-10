@@ -16,17 +16,52 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         DB::table('categories')->insert([
-            'name'          => 'Kunst',
+            'name'          => 'Sunset',
             'created_at'    => now(),
         ]);
 
         DB::table('categories')->insert([
-            'name'          => 'Muziek',
+            'name'          => 'Animals',
             'created_at'    => now(),
         ]);
 
         DB::table('categories')->insert([
-            'name'          => 'Natuur',
+            'name'          => 'Nature',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Space',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Sky',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Skyline',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'City',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Holiday',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Beach',
+            'created_at'    => now(),
+        ]);
+
+        DB::table('categories')->insert([
+            'name'          => 'Mountain',
             'created_at'    => now(),
         ]);
     }

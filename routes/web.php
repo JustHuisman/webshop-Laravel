@@ -11,7 +11,6 @@ use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,6 +35,7 @@ Route::middleware('auth')->prefix('admin')->group(function() {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/tos', [HomeController::class, 'tos'])->name('tos');
+Route::get('/home/categories', [HomeController::class, 'categories'])->name('categories');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 

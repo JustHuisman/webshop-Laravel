@@ -1,7 +1,4 @@
-<script src="{{ mix('/js/app.js') }}"></script>
-
 @extends('layouts.app')
-<!-- @require_once('/../public/js/posters.js') -->
 
 @section('content')
 <div id="app">

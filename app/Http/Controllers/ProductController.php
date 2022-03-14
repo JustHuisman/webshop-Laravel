@@ -12,7 +12,7 @@ class ProductController extends Controller
     }
     public function fetchProducts()
     {
-        $data = Product::orderBy('id')->paginate(12);
+        $data = Product::orderBy('id')->paginate(6);
         return response()->json($data);
     }
 }

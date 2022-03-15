@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\Category;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -14,24 +15,19 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        // foreach (Category::all() as $category) {
-        //     echo $category->name;
-        // }
+    {        
+        $categories = Category::all();
+        $products = Product::all();
 
-        return view('home');
-
+        return view('home', [
+            'categories' => $categories,
+            'products' => $products
+        ]);
     }
 
     public function tos()
     {
         return view('tos');
-    }
-
-    public function category(category $category)
-    {
-        $categories = Category::withCount('categories')->get()->sortByDesc('categories_id')->take(5);
-
     }
 
     public function categories()

@@ -9,6 +9,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 
 /*
@@ -23,7 +24,13 @@ use App\Http\Controllers\ProductController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/products', [ProductController::class, 'fetchProducts']);
+
+// test routes for filters; might need to be deleted/changed later
+Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/productcategories', [ProductCategoryController::class, 'index'])->name('productcategories');
+//
 
 Auth::routes();
 

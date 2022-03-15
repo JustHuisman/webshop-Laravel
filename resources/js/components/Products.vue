@@ -21,6 +21,7 @@
             return {
                 products: [],
                 page: 1,
+                checkedCategories: []
             };
         },
         props: {
@@ -66,8 +67,13 @@
             }).then(function(response) {
                 self.products = response.data.products;
             }).catch(function(response) {
-
+                
             })
+
+            this.$root.$on('update-categories', function(checkedCategories) {
+                //console.log(checkedCategories);
+                this.checkedCategories = checkedCategories;
+            }.bind(this));
         }
     }
 </script>

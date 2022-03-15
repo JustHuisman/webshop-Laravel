@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Product_variation;
 
 class HomeController extends Controller
 {
@@ -18,10 +19,12 @@ class HomeController extends Controller
     {        
         $categories = Category::all();
         $products = Product::all();
+        $variations = Product_variation::all();
 
         return view('home', [
             'categories' => $categories,
-            'products' => $products
+            'products' => $products,
+            'variations' => $variations,
         ]);
     }
 

@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Filters\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class Product extends Model
 {
@@ -24,14 +22,21 @@ class Product extends Model
         
     ];
 
-    public function categories()
+    protected $with = [
+        'productCategories',
+        'productVariations',
+
+    ];
+
+    public function productCategories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasMany(Product_category::class);
     }
 
-    public function scopeFilter(Builder $builder, $request)
+    public function productVariations()
     {
-        return (new ProductFilter($request))->filter($builder);
+        return $this->hasMany(Product_variation::class);
     }
+
 }
 

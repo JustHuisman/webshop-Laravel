@@ -18,8 +18,8 @@ class OrderTableSeeder extends Seeder
     {
         DB::table('orders')->insert([
             'user_id'          => 1,
-            'subtotal'         => 95,
-            'total'            => 100,
+            'subtotal'         => 12.50,
+            'total'            => 15,
             'delivery_address' => 1,
             'invoice_address'  => 2,
             'delivery_date'    => date('y-m-d'),
@@ -30,8 +30,8 @@ class OrderTableSeeder extends Seeder
 
         DB::table('orders')->insert([
             'user_id'          => 2,
-            'subtotal'         => 24,
-            'total'            => 24.99,
+            'subtotal'         => 7.50,
+            'total'            => 10,
             'delivery_address' => 2,
             'invoice_address'  => 2,
             'delivery_date'    => date_create('2022-03-05'),
@@ -42,8 +42,8 @@ class OrderTableSeeder extends Seeder
 
         DB::table('orders')->insert([
             'user_id'          => 3,
-            'subtotal'         => 95,
-            'total'            => 100,
+            'subtotal'         => 3.75,
+            'total'            => 5,
             'delivery_address' => 3,
             'invoice_address'  => 3,
             'delivery_date'    => date_create('2022-04-01'),

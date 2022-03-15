@@ -16,22 +16,41 @@ class Product_VariationTableSeeder extends Seeder
     public function run()
     {
         DB::table('product_variations')->insert([
-            'product_id' => 3,
-            'stock'      => 12,
+            'product_id' => 1,
+            'stock'      => 1,
             'created_at' => now(),
         ]);
 
         DB::table('product_variations')->insert([
             'product_id' => 1,
-            'stock'      => 0,
+            'stock'      => 2,
             'created_at' => now(),
         ]);
 
         DB::table('product_variations')->insert([
-            'product_id' => 2,
-            'stock'      => 101,
+            'product_id' => 1,
+            'stock'      => 3,
             'created_at' => now(),
         ]);
+
+        DB::table('product_variations')->insert([
+            'product_id' => 1,
+            'stock'      => 4,
+            'created_at' => now(),
+        ]);
+
+        DB::table('product_variations')->insert([
+            'product_id' => 1,
+            'stock'      => 5,
+            'created_at' => now(),
+        ]);
+
+        DB::table('product_variations')->insert([
+            'product_id' => 1,
+            'stock'      => 6,
+            'created_at' => now(),
+        ]);
+
 
     }
 }

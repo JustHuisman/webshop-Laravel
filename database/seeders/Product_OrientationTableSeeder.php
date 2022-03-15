@@ -22,14 +22,32 @@ class Product_OrientationTableSeeder extends Seeder
         ]);
 
         DB::table('product_orientations')->insert([
-            'orientation_id' => 2,
-            'variation_id'   => 1,
+            'orientation_id' => 1,
+            'variation_id'   => 2,
             'created_at'     => now(),
         ]);
 
         DB::table('product_orientations')->insert([
             'orientation_id' => 1,
             'variation_id'   => 3,
+            'created_at'     => now(),
+        ]);
+
+        DB::table('product_orientations')->insert([
+            'orientation_id' => 2,
+            'variation_id'   => 4,
+            'created_at'     => now(),
+        ]);
+
+        DB::table('product_orientations')->insert([
+            'orientation_id' => 2,
+            'variation_id'   => 5,
+            'created_at'     => now(),
+        ]);
+
+        DB::table('product_orientations')->insert([
+            'orientation_id' => 2,
+            'variation_id'   => 6,
             'created_at'     => now(),
         ]);
     }

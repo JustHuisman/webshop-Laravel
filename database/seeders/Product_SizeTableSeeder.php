@@ -32,5 +32,23 @@ class Product_SizeTableSeeder extends Seeder
             'variation_id' => 3,
             'created_at'   => now(),
         ]);
+
+        DB::table('product_sizes')->insert([
+            'size_id'      => 1,
+            'variation_id' => 4,
+            'created_at'   => now(),
+        ]);
+
+        DB::table('product_sizes')->insert([
+            'size_id'      => 2,
+            'variation_id' => 5,
+            'created_at'   => now(),
+        ]);
+
+        DB::table('product_sizes')->insert([
+            'size_id'      => 3,
+            'variation_id' => 6,
+            'created_at'   => now(),
+        ]);
     }
 }

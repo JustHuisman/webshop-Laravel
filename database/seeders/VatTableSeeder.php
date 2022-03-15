@@ -16,19 +16,19 @@ class VatTableSeeder extends Seeder
     public function run()
     {
         DB::table('vat')->insert([
-            'name'          => 'Algemeen tarief',
+            'name'          => 'General rate',
             'percentage'    => 21,
             'created_at'    => now(),
         ]);
 
         DB::table('vat')->insert([
-            'name'          => 'Laag tarief',
+            'name'          => 'Low rate',
             'percentage'    => 9,
             'created_at'    => now(),
         ]);
 
         DB::table('vat')->insert([
-            'name'          => 'Vrijstelling',
+            'name'          => 'Exemption',
             'percentage'    => 0,
             'created_at'    => now(),
         ]);

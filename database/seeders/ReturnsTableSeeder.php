@@ -18,8 +18,8 @@ class ReturnsTableSeeder extends Seeder
         DB::table('returns')->insert([
             'user_id'       => 1,
             'order_id'      => 1,
-            'reason'        => 'Verkeerd artikel ontvangen',
-            'user_comments' => 'Geen commentaar',
+            'reason'        => 'Received wrong article',
+            'user_comments' => 'No comment',
             'created_at'    => now(),
         ]);
 
@@ -27,14 +27,14 @@ class ReturnsTableSeeder extends Seeder
             'user_id'       => 2,
             'order_id'      => 2,
             'reason'        => 'Product defect',
-            'user_comments' => 'Ik wil een ander artikel',
+            'user_comments' => 'I want another product',
             'created_at'    => now(),
         ]);
 
         DB::table('returns')->insert([
             'user_id'       => 3,
             'order_id'      => 3,
-            'reason'        => 'Ik heb mij bedacht',
+            'reason'        => 'I changed my mind',
             'created_at'    => now(),
         ]);
     }

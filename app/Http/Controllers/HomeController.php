@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\Category;
-use App\Models\Product;
-use App\Models\Product_variation;
+// use App\Models\Product;
+// use App\Models\Product_size;
+// use App\Models\Product_variation;
 
 class HomeController extends Controller
 {
@@ -17,15 +18,15 @@ class HomeController extends Controller
      */
     public function index()
     {        
-        $categories = Category::all();
-        $products = Product::all();
-        $variations = Product_variation::all();
+        // $categories = Category::all();
+        // $products = Product::all();
+        // $productVariations = Product_variation::all();
 
-        return view('home', [
-            'categories' => $categories,
-            'products' => $products,
-            'variations' => $variations,
-        ]);
+        return view('home', 
+            // 'categories' => $categories,
+            // 'products' => $products,
+            // 'product_variations' => $productVariations,
+        );
     }
 
     public function tos()

@@ -10,4 +10,14 @@ class Product_size extends Model
     use HasFactory;
 
     protected $table = 'product_sizes';
+
+    protected $with = [
+        'productSizes',
+
+    ];
+
+    public function productSizes()
+    {
+        return $this->belongsTo(Product_variation::class);
+    }
 }

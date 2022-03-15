@@ -7,6 +7,7 @@ Vue.use(VueResource);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('products', require('./components/Products.vue').default);
+Vue.component('product', require('./components/Product.vue').default);
 Vue.component('InfiniteLoading', require('vue-infinite-loading'));
 Vue.component('product-display', require('./components/ProductDisplay.vue').default);
 Vue.component('product-filters', require('./components/ProductFilters.vue').default);

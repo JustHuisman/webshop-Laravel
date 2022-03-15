@@ -58,7 +58,9 @@
                     <p>Category</p>
                     <div v-for="category in categories" v-bind:key="category.id">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="filterCategoryLorem" checked>
+                            <input class="form-check-input" type="checkbox" :value="category.id" 
+                            :id="category.id" 
+                            v-model="checkedCategories">
                             <label class="form-check-label" for="flexCheckDefault">
                             {{ category.name }}
                             </label>
@@ -74,28 +76,38 @@
 <script>
     export default {
         mounted() {
-            console.log('ProductFilters Component mounted.')
+            console.log('ProductFilters Component mounted.');
         },
         data: function() {
             return {
                 categories: [],
+                checkedCategories: []
             };
         },
-        created() {
-        let self = this;
-
-        // Get all products calling function in controller (Ajax call)
-        axios({
-            method: 'GET',
-            url: 'home/categories',
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
+        methods: {
+            updateCategories: function(){
+                this.$root.$emit('update-categories', this.checkedCategories);
             }
-        }).then(function(response) {
-            self.categories = response.data.categories;
-        }).catch(function(response) {
+        },
+        watch: {
+            checkedCategories: function (cat) {
+                this.updateCategories(cat);
+            }
+        },
+        created() {
+            let self = this;
 
-        })
-    },
+            // Get all products calling function in controller (Ajax call)
+            axios({
+                method: 'GET',
+                url: 'home/categories',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(function(response) {
+                self.categories = response.data.categories;
+            }).catch(function(response) {
+            })
+        },
     }
 </script>

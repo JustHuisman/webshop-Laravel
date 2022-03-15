@@ -5615,14 +5615,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('ProductFilters Component mounted.');
   },
   data: function data() {
     return {
-      categories: []
+      categories: [],
+      checkedCategories: []
     };
+  },
+  methods: {
+    updateCategories: function updateCategories() {
+      this.$root.$emit('update-categories', this.checkedCategories);
+    }
+  },
+  watch: {
+    checkedCategories: function checkedCategories(cat) {
+      this.updateCategories(cat);
+    }
   },
   created: function created() {
     var self = this; // Get all products calling function in controller (Ajax call)
@@ -5673,7 +5686,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       products: [],
-      page: 1
+      page: 1,
+      checkedCategories: []
     };
   },
   props: {},
@@ -5715,6 +5729,10 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       self.products = response.data.products;
     })["catch"](function (response) {});
+    this.$root.$on('update-categories', function (checkedCategories) {
+      //console.log(checkedCategories);
+      this.checkedCategories = checkedCategories;
+    }.bind(this));
   }
 });
 
@@ -39818,12 +39836,43 @@ var render = function () {
               return _c("div", { key: category.id }, [
                 _c("div", { staticClass: "form-check" }, [
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
+                      },
+                    ],
                     staticClass: "form-check-input",
-                    attrs: {
-                      type: "checkbox",
-                      value: "",
-                      id: "filterCategoryLorem",
-                      checked: "",
+                    attrs: { type: "checkbox", id: category.id },
+                    domProps: {
+                      value: category.id,
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, category.id) > -1
+                        : _vm.checkedCategories,
+                    },
+                    on: {
+                      change: function ($event) {
+                        var $$a = _vm.checkedCategories,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = category.id,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              (_vm.checkedCategories = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.checkedCategories = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.checkedCategories = $$c
+                        }
+                      },
                     },
                   }),
                   _vm._v(" "),

@@ -25,6 +25,7 @@ class Product extends Model
     protected $with = [
         'productCategories',
         'productVariations',
+        'orderDetails'
 
     ];
 
@@ -35,7 +36,12 @@ class Product extends Model
 
     public function productVariations()
     {
-        return $this->hasMany(Product_variation::class);
+        return $this->hasOne(Product_variation::class);
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasOne(Order_detail::class);
     }
 
 }

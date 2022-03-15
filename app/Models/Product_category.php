@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use App\Filters\ProductCategoryFilter;
 
 class Product_category extends Model
 {
@@ -13,8 +11,14 @@ class Product_category extends Model
 
     protected $table = 'product_categories';
 
-    protected $casts = [
-        'category_id' => 'array',
-    ];
+    // protected $casts = [
+    //     'category_id' => 'array',
+    // ];
+
+    // public function products()
+    // {
+    //     return $this->hasMany(Category::class);
+    // }
+
 
 }

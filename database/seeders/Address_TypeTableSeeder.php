@@ -16,17 +16,17 @@ class Address_TypeTableSeeder extends Seeder
     public function run()
     {
         DB::table('address_types')->insert([
-            'name'          => 'Vestigingsadres',
+            'name'          => 'Business address',
             'created_at'    => now(),
         ]);
 
         DB::table('address_types')->insert([
-            'name'          => 'Factuuradres',
+            'name'          => 'Billing address',
             'created_at'    => now(),
         ]);
 
         DB::table('address_types')->insert([
-            'name'          => 'Transportadres',
+            'name'          => 'Shipping address',
             'created_at'    => now(),
         ]);
     }

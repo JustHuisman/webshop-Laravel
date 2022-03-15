@@ -16,22 +16,22 @@ class Order_StatusTableSeeder extends Seeder
     public function run()
     {
         DB::table('order_statuses')->insert([
-            'name'          => 'Verwerken',
+            'name'          => 'Processing',
             'created_at'    => now(),
         ]);
 
         DB::table('order_statuses')->insert([
-            'name'          => 'Verzonden',
+            'name'          => 'Shipped',
             'created_at'    => now(),
         ]);
 
         DB::table('order_statuses')->insert([
-            'name'          => 'Geleverd',
+            'name'          => 'Delivered',
             'created_at'    => now(),
         ]);
 
         DB::table('order_statuses')->insert([
-            'name'          => 'Compleet',
+            'name'          => 'Completed',
             'created_at'    => now(),
         ]);
     }

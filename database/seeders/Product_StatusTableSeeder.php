@@ -16,22 +16,22 @@ class Product_StatusTableSeeder extends Seeder
     public function run()
     {
         DB::table('product_statuses')->insert([
-            'name'          => 'Geen',
+            'name'          => 'None',
             'created_at'    => now(),
         ]);
 
         DB::table('product_statuses')->insert([
-            'name'          => 'Terugkerend',
+            'name'          => 'Returning',
             'created_at'    => now(),
         ]);
 
         DB::table('product_statuses')->insert([
-            'name'          => 'Teruggekeerd',
+            'name'          => 'Returned',
             'created_at'    => now(),
         ]);
 
         DB::table('product_statuses')->insert([
-            'name'          => 'Verwerkt',
+            'name'          => 'Processed',
             'created_at'    => now(),
         ]);
     }

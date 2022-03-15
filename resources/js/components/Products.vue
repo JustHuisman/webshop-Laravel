@@ -1,15 +1,14 @@
 <template>
     <div class="row">
         <div class="col-md-4 pt-3" v-for="product in products" v-bind:key="product.id">
-            <div class="card">
+            <div class="card" @click="showProduct(product)">
                 <img :src="'/images/posters/landscape/' + product.id + '.jpg'" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <input type="button" class="btn btn-primary" :disabled="product.stock === 0" @click="addToCart(product)" value="Order">
                 </div>
             </div>
         </div>
-        <infinite-loading @distance="1" @infinite="handleLoadMore"></infinite-loading>
+        <infinite-loading @infinite="handleLoadMore"></infinite-loading>
     </div>
 </template>
 
@@ -33,16 +32,26 @@
                     .then(res => {
                         return res.json();
                     }).then(res => {
-                        $.each(res.data, (key, value) => {
-                            this.products.push(value);
-                        });
-                        $state.loaded();
+                        if(res.data.length){
+                            $.each(res.data, (key, value) => {
+                                this.products.push(value);
+                            });
+                            $state.loaded();
+                        }
+                        else 
+                        { 
+                            $state.complete();
+                        }
+                        
                     });
                 this.page = this.page + 1;
             },
             addToCart(product) {
                 this.$root.$emit('add-to-cart', product);
             },
+            showProduct(product) {
+                this.$root.$emit('show-product', product);
+            }
         },
         created() {
             let self = this;

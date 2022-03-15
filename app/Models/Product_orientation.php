@@ -10,4 +10,14 @@ class Product_orientation extends Model
     use HasFactory;
 
     protected $table = 'product_orientations';
+
+    protected $with = [
+        'productOrientations',
+
+    ];
+
+    public function productOrientations()
+    {
+        return $this->belongsTo(Product_variation::class);
+    }
 }

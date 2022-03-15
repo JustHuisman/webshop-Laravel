@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Orientation extends Model
 {
     use HasFactory;
+
+    protected $table = 'orientations';
 }

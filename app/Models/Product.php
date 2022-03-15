@@ -26,12 +26,8 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasMany(Category::class);
     }
 
-    public function scopeFilter(Builder $builder, $request)
-    {
-        return (new ProductFilter($request))->filter($builder);
-    }
 }
 

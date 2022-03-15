@@ -17,8 +17,4 @@ class Product_category extends Model
         'category_id' => 'array',
     ];
 
-    public function scopeFilter(Builder $builder, $request)
-    {
-        return (new ProductCategoryFilter($request))->filter($builder);
-    }
 }

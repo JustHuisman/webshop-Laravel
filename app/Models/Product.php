@@ -19,7 +19,9 @@ class Product extends Model
     ];
 
     protected $hidden = [
-        
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $with = [

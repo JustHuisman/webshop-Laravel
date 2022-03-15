@@ -14,7 +14,7 @@ class ProductController extends Controller
 
     public function fetchProducts()
     {
-        $data = Product::orderBy('id')->paginate(6);
+        $data = Product::orderBy('amount_sold', 'desc')->paginate(6);
         return response()->json($data);
 
         

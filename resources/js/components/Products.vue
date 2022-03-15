@@ -1,13 +1,6 @@
 <template>
-    <div class="row">
-        <div class="col-md-4 pt-3" v-for="product in products" v-bind:key="product.id">
-            <div class="card" @click="showProduct(product)">
-                <img :src="'/images/posters/landscape/' + product.id + '.jpg'" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                </div>
-            </div>
-        </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        <product class="col-md-4 pt-3" v-for="product in products" :key="product.id" :product="product"></product>
         <infinite-loading @infinite="handleLoadMore"></infinite-loading>
     </div>
 </template>
@@ -52,7 +45,7 @@
             },
             showProduct(product) {
                 this.$root.$emit('show-product', product);
-            }
+            },
         },
         created() {
             let self = this;
@@ -71,7 +64,6 @@
             })
 
             this.$root.$on('update-categories', function(checkedCategories) {
-                //console.log(checkedCategories);
                 this.checkedCategories = checkedCategories;
             }.bind(this));
         }

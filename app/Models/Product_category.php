@@ -11,9 +11,13 @@ class Product_category extends Model
 
     protected $table = 'product_categories';
 
-    // protected $casts = [
-    //     'category_id' => 'array',
-    // ];
+    protected $fillable = [
+        'product_id',
+    ];
+
+    protected $casts = [
+        'category_id' => 'array',
+    ];
 
     // public function products()
     // {

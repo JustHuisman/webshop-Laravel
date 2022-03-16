@@ -15,54 +15,26 @@ class CategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            'name'          => 'Sunset',
-            'created_at'    => now(),
-        ]);
+        
+        $categories = [
+            'Sunset',
+            'Animals',
+            'Nature',
+            'Space',
+            'Sky',
+            'Skyline',
+            'City',
+            'Holiday',
+            'Beach',
+            'Mountain',
+        ];
 
-        DB::table('categories')->insert([
-            'name'          => 'Animals',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Nature',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Space',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Sky',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Skyline',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'City',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Holiday',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Beach',
-            'created_at'    => now(),
-        ]);
-
-        DB::table('categories')->insert([
-            'name'          => 'Mountain',
-            'created_at'    => now(),
-        ]);
+        foreach ($categories as $category) {
+            \App\Models\Category::create([
+                'name'          => $category,
+                'created_at'    => now(),
+            ]);
+            
+        }
     }
 }

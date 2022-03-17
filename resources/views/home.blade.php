@@ -2,9 +2,11 @@
 
 @section('content')
 <div id="app">
+    <!-- WRAPPER CONTAINER WITH PRODUCT FILTERS AND PRODUCTS. -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
+                <!-- PRODUCT FILTERS -->
                 <product-filters :filters="filters" ></product-filters>
                 <div>
                     <div class="form-check">
@@ -26,8 +28,9 @@
                         {{ __('You are logged in!') }}
                     </div>
                 </div>
+                <!-- PRODUCTS CONTAINER -->
                 <div class="container" style="margin-top:30px">
-                    <products></products> 
+                    <products></products>  
                 </div>
                 
                 <product-display>

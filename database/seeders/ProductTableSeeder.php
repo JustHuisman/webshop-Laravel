@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Product;
-use Database\Seeders\Product_CategoryTableSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductTableSeeder extends Seeder
 {
@@ -15,14 +13,14 @@ class ProductTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run($productdata)
+    public function run($products)
     {
         //data in DatabaseSeeder.php
 
-        foreach ($productdata as $array) {
+        foreach ($products as $product) {
             Product::create([
-                'name'                => $array['name'],
-                'amount_sold'         => $array['id'],
+                'name'                => $product['name'],
+                'amount_sold'         => $product['id'],
                 'discount_percentage' => 10,
                 'vat_id'              => rand(1,3),
                 'created_at'          => now(),

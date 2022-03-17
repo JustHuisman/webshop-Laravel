@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product_variation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -361,12 +362,12 @@ class DatabaseSeeder extends Seeder
         $this->call(Address_TypeTableSeeder::class);
         $this->call(Order_StatusTableSeeder::class);
 
-        $this->callWith(ProductTableSeeder::class, ['productdata' => $products]);
-        $this->call(Product_StatusTableSeeder::class);
-        $this->call(Product_VariationTableSeeder::class);
-        $this->callWith(Product_CategoryTableSeeder::class, ['productcategorydata' => $products]);
+        $this->callWith(ProductTableSeeder::class,           ['products'          => $products]);
+        $this->callWith(Product_VariationTableSeeder::class, ['productvariations' => $products]);
+        $this->callWith(Product_CategoryTableSeeder::class,  ['productcategories' => $products]);
         $this->call(Product_OrientationTableSeeder::class);
         $this->call(Product_SizeTableSeeder::class);
+        $this->call(Product_StatusTableSeeder::class);
 
         $this->call(UserTableSeeder::class);
         $this->call(AddressTableSeeder::class);

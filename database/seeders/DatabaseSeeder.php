@@ -362,10 +362,9 @@ class DatabaseSeeder extends Seeder
         $this->call(Address_TypeTableSeeder::class);
         $this->call(Order_StatusTableSeeder::class);
 
-        $this->callWith(ProductTableSeeder::class, ['products' => $products]);
-        // $this->call(Product_StatusTableSeeder::class);
+        $this->callWith(ProductTableSeeder::class,           ['products'          => $products]);
         $this->callWith(Product_VariationTableSeeder::class, ['productvariations' => $products]);
-        $this->callWith(Product_CategoryTableSeeder::class, ['productcategories' => $products]);
+        $this->callWith(Product_CategoryTableSeeder::class,  ['productcategories' => $products]);
         $this->call(Product_OrientationTableSeeder::class);
         $this->call(Product_SizeTableSeeder::class);
         $this->call(Product_StatusTableSeeder::class);

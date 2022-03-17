@@ -2,13 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
 use App\Models\Product_category;
-use Database\Seeders\ProductTableSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
 
 class Product_CategoryTableSeeder extends Seeder
 {
@@ -17,16 +13,16 @@ class Product_CategoryTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run($productcategorydata)
+    public function run($productcategories)
     {
 
         //data in DatabaseSeeder.php
 
-        foreach ($productcategorydata as $array) {
-            foreach ($array['category'] as $value) {
+        foreach ($productcategories as $array) {
+            foreach ($array['category'] as $productcategory) {
                 Product_category::create([
                     'product_id' => $array['id'],
-                    'category_id' => $value,
+                    'category_id' => $productcategory,
                     'created_at'  => now(),   
                     ]);
                 }

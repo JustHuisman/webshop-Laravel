@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product_variation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class Product_VariationTableSeeder extends Seeder
 {
@@ -13,44 +13,18 @@ class Product_VariationTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($productvariations)
     {
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 1,
-            'created_at' => now(),
-        ]);
+ 
+        //data in DatabaseSeeder.php
 
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 2,
-            'created_at' => now(),
-        ]);
-
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 3,
-            'created_at' => now(),
-        ]);
-
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 4,
-            'created_at' => now(),
-        ]);
-
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 5,
-            'created_at' => now(),
-        ]);
-
-        DB::table('product_variations')->insert([
-            'product_id' => 1,
-            'stock'      => 6,
-            'created_at' => now(),
-        ]);
-
-
+        foreach ($productvariations as $productvariation) {
+        for ($i = 1; $i < 7; $i++) {
+            Product_variation::create([
+                'product_id' => $productvariation['id'],
+                'stock'      => $i
+                ]);
+            }
+        }
     }
 }

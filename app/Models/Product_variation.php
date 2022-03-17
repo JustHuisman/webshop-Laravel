@@ -25,12 +25,12 @@ class Product_variation extends Model
 
     public function productSizes()
     {
-        return $this->hasOne(Product_size::class, 'size_id');
+        return $this->hasMany(Product_size::class, 'size_id');
     }
 
     public function productOrientations()
     {
-        return $this->hasOne(Product_orientation::class, 'orientation_id');
+        return $this->hasMany(Product_orientation::class, 'orientation_id');
     }
 
 }

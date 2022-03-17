@@ -12,12 +12,12 @@ class Product_size extends Model
     protected $table = 'product_sizes';
 
     protected $with = [
-        'productSizes',
+        'sizes',
 
     ];
 
-    public function productSizes()
+    public function sizes()
     {
-        return $this->belongsTo(Product_variation::class);
+        return $this->hasMany(Size::class);
     }
 }

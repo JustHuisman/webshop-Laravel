@@ -27,11 +27,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/products', [ProductController::class, 'fetchProducts']);
 
-// test routes for filters; might need to be deleted/changed later
-Route::get('/product', [ProductController::class, 'index'])->name('product');
-Route::get('/productcategories', [ProductCategoryController::class, 'index'])->name('productcategories');
-//
-
 Auth::routes();
 
 Route::middleware('auth')->prefix('admin')->group(function() {

@@ -12,12 +12,13 @@ class Product_orientation extends Model
     protected $table = 'product_orientations';
 
     protected $with = [
-        'productOrientations',
-
+        'orientations',
     ];
 
-    public function productOrientations()
+    public function orientations()
     {
+        // return $this->morphMany(Product_variation::class, 'variation_id');
         return $this->belongsTo(Product_variation::class);
     }
+
 }

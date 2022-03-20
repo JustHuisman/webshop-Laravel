@@ -18,11 +18,4 @@ class Product_category extends Model
     protected $casts = [
         'category_id' => 'array',
     ];
-
-    // public function products()
-    // {
-    //     return $this->hasMany(Category::class);
-    // }
-
-
 }

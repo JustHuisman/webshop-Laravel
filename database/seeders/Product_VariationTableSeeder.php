@@ -19,11 +19,15 @@ class Product_VariationTableSeeder extends Seeder
         //data in DatabaseSeeder.php
 
         foreach ($productvariations as $productvariation) {
-        for ($i = 1; $i < 7; $i++) {
-            Product_variation::create([
-                'product_id' => $productvariation['id'],
-                'stock'      => $i
-                ]);
+            for ($i = 1; $i < 3; $i++) {
+                for ($j = 1; $j < 4; $j++) {
+                    Product_variation::create([
+                        'product_id'     => $productvariation['id'],
+                        'stock'          => $productvariation['stock'],
+                        'orientation_id' => $i,
+                        'size_id'        => $j
+                        ]);
+                }
             }
         }
     }

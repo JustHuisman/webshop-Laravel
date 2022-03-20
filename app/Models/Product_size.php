@@ -12,12 +12,14 @@ class Product_size extends Model
     protected $table = 'product_sizes';
 
     protected $with = [
-        'sizes',
-
+        'sizes'
     ];
+
 
     public function sizes()
     {
-        return $this->hasMany(Size::class);
+        // return $this->morphMany(Product_variation::class, 'variation_id');
+        return $this->belongsTo(Product_variation::class);
     }
 }
+

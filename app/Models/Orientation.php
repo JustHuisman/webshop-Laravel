@@ -10,4 +10,9 @@ class Orientation extends Model
     use HasFactory;
 
     protected $table = 'orientations';
+
+    protected $fillable = [
+        'product_id',
+        'variation_id'
+    ];
 }

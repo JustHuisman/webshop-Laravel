@@ -12,25 +12,17 @@ class Product_variation extends Model
     protected $table = 'product_variations';
 
     protected $with = [
-        'products',
-        'productSizes',
-        'productOrientations',
-
+        'size',
+        'orientation'
     ];
 
-    public function products()
+    public function size()
     {
-        return $this->belongsTo(Product::class);
+    return $this->belongsTo(Size::class);    
     }
 
-    public function productSizes()
+    public function orientation()
     {
-        return $this->hasMany(Product_size::class, 'size_id');
+        return $this->belongsTo(Orientation::class);
     }
-
-    public function productOrientations()
-    {
-        return $this->hasMany(Product_orientation::class, 'orientation_id');
-    }
-
 }

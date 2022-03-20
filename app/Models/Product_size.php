@@ -18,7 +18,6 @@ class Product_size extends Model
 
     public function sizes()
     {
-        // return $this->morphMany(Product_variation::class, 'variation_id');
         return $this->belongsTo(Product_variation::class);
     }
 }

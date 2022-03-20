@@ -17,7 +17,6 @@ class Product_orientation extends Model
 
     public function orientations()
     {
-        // return $this->morphMany(Product_variation::class, 'variation_id');
         return $this->belongsTo(Product_variation::class);
     }
 

@@ -1,11 +1,11 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Admin Products') }}</div>
+                <div class="card-header">{{ __('Returns') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))

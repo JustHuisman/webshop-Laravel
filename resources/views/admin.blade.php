@@ -14,8 +14,15 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('Choose a subject:') }}
                 </div>
+                <ul>
+                    <li> <a href="/admin-products">Products</a> </li>
+                    <li> <a href="/admin-users">Users</a> </li>
+                    <li> <a href="/admin-returns">Returns</a> </li>
+                    </ul>
+                    <br>
+                    <a href="/logout">Log out</a>
             </div>
         </div>
     </div>

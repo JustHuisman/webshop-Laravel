@@ -5,11 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Edit products') }}</div>
+                <div class="card-header">{{ __('Show product') }}</div>
+
                 <div>
-                    <a href="/admin-products">Go back</a> <a href="/logout">Log out</a>
-                    <!-- <a href="/admin-products">Products 1-20</a> 
-                    <a href="/admin-products?page=2">Products 21-40</a> <a href="/admin-products?page=3">Products 41-56</a>  -->
+                    <a href="/admin-products"><button>Go back</button></a> <a href="/logout"><button>Log out</button></a>
                 </div>
 
                 <div class="card-body">
@@ -19,17 +18,17 @@
                     </div>
                     @endif
 
-                    {{ __('List of products:') }}
+                    {{ __('Product details:') }}
                 </div>
-                @foreach ($products as $product)
                 <ul>
-                    <a href="/product/{id}">{{ $product->id . '. ' . $product->name }}</a>
+                    <li> {{ $product->name }} </li>
+                   <li> <img src="{{URL::asset('/images/posters/portrait/').'/'.$product->id.'.jpg'}}" alt="{{$product->name}}" height="200" width="200"> </li>
+                   <li> {{ $test->stock }} </li>   
                 </ul>
-                @endforeach
             </div>
-            <a href="/products/<?= $product->id ?>/edit">
-                                <button>Edit</button>
-                            </a>
+            <a href="/admin-products/{{$product->id}}/edit">
+                <button>Edit</button>
+            </a>
         </div>
     </div>
 </div>

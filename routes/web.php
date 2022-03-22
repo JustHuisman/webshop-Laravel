@@ -52,7 +52,7 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 Route::get('/admin-products', [ProductsController::class, 'index'])->name('admin-products.index');
 Route::get('/admin-products/{id}', [ProductsController::class, 'show'])->name('admin-products.show');
-Route::get('/admin-products/edit', [ProductsController::class, 'edit'])->name('admin-products.edit');
+Route::get('/admin-products/{id}/edit', [ProductsController::class, 'edit'])->name('admin-products.edit');
 
 
 

@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h1>{{ poster.title }}</h1>
+                    <h1>{{ this.productTitle }}</h1>
                     <div>
                         <button class="orientationButton" type="button" v-for="(orientation, index) in orientations"
                             :key="index" @click='updateOrientation(index)'>
@@ -21,7 +21,11 @@
                         </button>
                     </div>
                     <div>
-                        <button class="sizeButton" type="button" v-for="(size, index) in sizes" :key="index"
+                        <button class="sizeButtonLandscape" type="button" v-show="selectedOrientation == 0" v-for="(size, index) in sizes" :key="index"
+                            @click='updateSize(index)'>
+                            {{ size }}
+                        </button>
+                        <button class="sizeButtonPortrait" type="button" v-show="selectedOrientation == 1" v-for="(size, index) in sizes" :key="index+3"
                             @click='updateSize(index)'>
                             {{ size }}
                         </button>
@@ -30,7 +34,7 @@
                     <div v-show="originalPrice!== 0" class="price"
                         style="text-decoration: line-through; color: gray;">
                         &#36;{{ originalPrice }},-</div>
-                    <div class="price">&#36;{{ price }},-</div>
+                    <div class="price">&#36;{{ this.price }},-</div>
                     <button v-on:click="addToCart(poster, orientations[selectedOrientation], sizes[selectedSize])">Add to Cart
                     </button>
                 </div>
@@ -50,23 +54,40 @@
                 poster: 0,
                 selectedOrientation: 0,
                 orientations: ["Landscape", "Portrait"],
+                availableOrientations: [],
                 selectedSize: 0,
                 sizes: ["Large", "Medium", "Small"],
+                availableSizesLandscape: [],
+                availableSizesPortrait: [],
+                orientationButtons: [],
+                sizeButtonsLandscape: [],
+                sizeButtonsPortrait: [],
                 productDiscount: 1,
             }
         },
         computed: {
             price(){
-                return 0;
-                //return (this.poster.price);
+                let price = 0;
+                if(this.selectedOrientation == 0){
+                    if(this.sizeButtonsLandscape.length > 0){
+                        if(this.sizeButtonsLandscape[this.selectedSize].disabled == false){
+                            price = this.getPrice();
+                        }
+                    }
+                } else if(this.selectedOrientation == 1){
+                    if(this.sizeButtonsPortrait.length > 0){
+                        if(this.sizeButtonsPortrait[this.selectedSize].disabled == false){
+                            price = this.getPrice();
+                        }
+                    }
+                }
+                return price;
             },
             discount(){
                 return 0;
-                //return (this.poster.discount);
             },
             originalPrice(){
                 return 0;
-                
             },
             image(){
                 if(this.selectedOrientation === 0){
@@ -76,15 +97,19 @@
                 }
             },
             productTitle(){
-                return 0;
+                return this.poster.name;
             },
         },
         methods: {
             showProduct: function() {
-                this.updateOrientationButtons();
-                this.updateSizeButtons();
                 $('.product').fadeIn();
                 $('.productBackground').fadeIn();
+                this.getVariationButtons();
+                this.$forceUpdate();
+                this.setAvailableVariations();
+                this.updateOrientationButtons();
+                this.updateSizeButtons();
+                
             },
             hideProduct: function() {
                 $('.product').fadeOut();
@@ -96,11 +121,10 @@
             },
             //loop through orientation buttons and set the current to 'selected'
             updateOrientationButtons: function() {
-                let orientationButtons = document.querySelectorAll(".orientationButton");
-                for(let i = 0; i < orientationButtons.length; i++) {
-                    orientationButtons[i].classList.remove("selected");
+                for(let i = 0; i < this.orientationButtons.length; i++) {
+                    this.orientationButtons[i].classList.remove("selected");
                 }
-                orientationButtons[this.selectedOrientation].classList.add("selected");
+                this.orientationButtons[this.selectedOrientation].classList.add("selected");
             },
             updateSize: function(index) {
                 this.selectedSize = index;
@@ -108,11 +132,97 @@
             },
             //loop through size buttons and set the current to 'selected'
             updateSizeButtons: function() {
-                let sizeButtons = document.querySelectorAll(".sizeButton");
-                for(let i = 0; i < sizeButtons.length; i++) {
-                    sizeButtons[i].classList.remove("selected");
+                for(let i = 0; i < this.sizeButtonsLandscape.length; i++) {
+                    this.sizeButtonsLandscape[i].classList.remove("selected");
                 }
-                sizeButtons[this.selectedSize].classList.add("selected");
+                for(let i = 0; i < this.sizeButtonsPortrait.length; i++) {
+                    this.sizeButtonsPortrait[i].classList.remove("selected");
+                }
+                this.sizeButtonsLandscape[this.selectedSize].classList.add("selected");
+                this.sizeButtonsPortrait[this.selectedSize].classList.add("selected");
+            },
+            setAvailableVariations: function(){
+                if('product_variations' in this.poster){
+                    self = this;
+                    self.availableOrientations = [];
+                    self.availableSizes = [];
+                    self.poster.product_variations.forEach(function (variations) {
+                        if(variations.orientation_id == 1){
+                            self.availableOrientations.push("Landscape");
+
+                            if(variations.size_id == 1){
+                                self.availableSizesLandscape.push("Large");
+                            } else if(variations.size_id == 2){
+                                self.availableSizesLandscape.push("Medium");
+                            } else if(variations.size_id == 3){
+                                self.availableSizesLandscape.push("Small"); 
+                            }
+                        }
+                        if(variations.orientation_id == 2){
+                            self.availableOrientations.push("Portrait");
+
+                            if(variations.size_id == 1){
+                                self.availableSizesPortrait.push("Large");
+                            } else if(variations.size_id == 2){
+                                self.availableSizesPortrait.push("Medium");
+                            } else if(variations.size_id == 3){
+                                self.availableSizesPortrait.push("Small"); 
+                            }
+                        }
+                    })
+                    //return unique entries in arrays
+                    self.availableOrientations = [...new Set(self.availableOrientations)];
+                    self.availableSizesLandscape = [...new Set(self.availableSizesLandscape)];
+                    self.availableSizesPortrait = [...new Set(self.availableSizesPortrait)];
+
+                    
+                    if(!self.availableOrientations.includes("Landscape")){
+                        this.orientationButtons[0].disabled = true;
+                    }
+                    if(!self.availableOrientations.includes("Portrait")){
+                        this.orientationButtons[1].disabled = true;
+                    }
+                    if(self.selectedOrientation == 0){
+                        if(!self.availableSizesLandscape.includes("Large")){
+                            this.sizeButtonsLandscape[0].disabled = true;
+                        }
+                        if(!self.availableSizesLandscape.includes("Medium")){
+                            this.sizeButtonsLandscape[1].disabled = true;
+                        }
+                        if(!self.availableSizesLandscape.includes("Small")){
+                            this.sizeButtonsLandscape[2].disabled = true;
+                        }
+                    } else if(self.selectedOrientation == 1){
+                        if(!self.availableSizesPortrait.includes("Large")){
+                            this.sizeButtonsPortrait[0].disabled = true;
+                        }
+                        if(!self.availableSizesPortrait.includes("Medium")){
+                            this.sizeButtonsPortrait[1].disabled = true;
+                        }
+                        if(!self.availableSizesPortrait.includes("Small")){
+                            this.sizeButtonsPortrait[2].disabled = true;
+                        }
+                    }
+                }
+            },
+            getPrice: function(){
+                let price = 0;
+                if('product_variations' in this.poster){
+                    self = this;
+                    self.availableOrientations = [];
+                    self.availableSizes = [];
+                    self.poster.product_variations.forEach(function (variations) {
+                        if(variations.orientation_id == (self.selectedOrientation + 1) && variations.size_id == (self.selectedSize +1)){
+                            price = variations.size.price;
+                        }
+                    })
+                }   
+                return price;
+            },
+            getVariationButtons: function(){
+                this.orientationButtons = document.querySelectorAll(".orientationButton");
+                this.sizeButtonsLandscape = document.querySelectorAll(".sizeButtonLandscape");
+                this.sizeButtonsPortrait = document.querySelectorAll(".sizeButtonPortrait");
             },
             //emit to the event bus (app.js) which item was added, the event bus is visible to all components
             addToCart: function(poster, orientation, size) {

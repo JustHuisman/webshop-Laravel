@@ -1,7 +1,10 @@
 <template>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
         <product class="col-md-4 pt-3" v-for="product in products" :key="product.id" :product="product"></product>
-        <infinite-loading @infinite="handleLoadMore"></infinite-loading>
+        <infinite-loading @infinite="handleLoadMore" ref="infiniteLoading">
+            <div slot="no-more"></div>
+            <div slot="no-results"></div>
+        </infinite-loading>
     </div>
 </template>
 
@@ -14,14 +17,31 @@
             return {
                 products: [],
                 page: 1,
-                checkedCategories: []
+                filters: {
+                    checkedCategories: [],
+                    orientationLandscape: true,
+                    orientationPortrait: true,
+                    sizeLarge: true,
+                    sizeMedium: true,
+                    sizeSmall: true,
+                    priceLow: 0,
+                    priceHigh: 9999,
+                    checkedDiscount: false
+                }
             };
         },
         props: {
             
         },
         methods: {
+            resetInfiniteLoadingState(){
+                if(this.$refs.infiniteLoading){
+                    this.$refs.infiniteLoading.stateChanger.reset();
+                }
+                
+            },
             handleLoadMore($state) {
+
                 this.$http.get('/products?page=' + this.page)
                     .then(res => {
                         return res.json();
@@ -63,8 +83,13 @@
                 
             })
 
-            this.$root.$on('update-categories', function(checkedCategories) {
-                this.checkedCategories = checkedCategories;
+            this.$root.$on('update-filters', function(filters) {
+                this.filters = filters;
+                
+            }.bind(this));
+
+            this.$root.$on('load-more-products', function() {
+                this.resetInfiniteLoadingState();
             }.bind(this));
         }
     }

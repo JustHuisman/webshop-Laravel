@@ -5415,7 +5415,18 @@ __webpack_require__.r(__webpack_exports__);
   props: ['product'],
   data: function data() {
     return {
-      checkedCategories: []
+      filters: {
+        checkedCategories: [],
+        orientationLandscape: true,
+        orientationPortrait: true,
+        sizeLarge: true,
+        sizeMedium: true,
+        sizeSmall: true,
+        priceLow: 0,
+        priceHigh: 9999,
+        checkedDiscount: false
+      },
+      lowestPrice: 999999
     };
   },
   computed: {
@@ -5423,9 +5434,7 @@ __webpack_require__.r(__webpack_exports__);
       return '/images/posters/portrait/' + this.product.id + '.jpg';
     },
     isVisible: function isVisible() {
-      var isTrue = this.checkIfVisible(this.product);
-      console.log("is visible? " + isTrue);
-      return isTrue;
+      return this.checkIfVisible(this.product);
     }
   },
   methods: {
@@ -5434,35 +5443,71 @@ __webpack_require__.r(__webpack_exports__);
     },
     checkIfVisible: function checkIfVisible(_product) {
       var self = this;
-      var isVisible = false; //check if the product exists
+      var hasCategory = false;
+      var hasOrientation = false;
+      var hasSize = false;
+      var inPriceRange = false;
+      var hasDiscount = false; //check if the product exists
 
       if (_product) {
-        //if no categories are checked, show everything
-        if (self.checkedCategories.length === 0) {
-          return true; //check if product categories exists in the object
-        } else if ('product_categories' in _product) {
-          _product.product_categories.forEach(function (cat) {
-            console.log(Object.values(self.checkedCategories).includes(cat.category_id));
+        //variations
+        if ('product_variations' in _product) {
+          _product.product_variations.forEach(function (variations) {
+            if (variations.orientation_id == 1 && self.filters.orientationLandscape == true) {
+              hasOrientation = true;
+            }
 
-            if (Object.values(self.checkedCategories).includes(cat.category_id)) {
-              isVisible = true;
+            if (variations.orientation_id == 2 && self.filters.orientationPortrait == true) {
+              hasOrientation = true;
+            }
+
+            if (variations.size_id == 1 && self.filters.sizeLarge == true) {
+              hasSize = true;
+            } else if (variations.size_id == 2 && self.filters.sizeMedium == true) {
+              hasSize = true;
+            } else if (variations.size_id == 3 && self.filters.sizeSmall == true) {
+              hasSize = true;
+            }
+
+            if (parseFloat(variations.size.price) < self.lowestPrice) {
+              self.lowestPrice = parseFloat(variations.size.price);
             }
           });
-        } else {
-          isVisible = false;
-        }
-      } else {
-        isVisible = false;
-      }
+        } //check if the lowest available price of the product is in range of the filter
 
-      return isVisible;
+
+        if (self.lowestPrice >= self.filters.priceLow && self.lowestPrice <= self.filters.priceHigh) {
+          inPriceRange = true;
+        }
+
+        if (_product.discount_percentage > 0 && self.filters.checkedDiscount) {
+          hasDiscount = true;
+        } else if (!self.filters.checkedDiscount) {
+          hasDiscount = true;
+        } //if no categories are checked, show everything
+
+
+        if (self.filters.checkedCategories.length === 0) {
+          hasCategory = true; //check if product categories exists in the object
+        } else if ('product_categories' in _product) {
+          _product.product_categories.forEach(function (cat) {
+            if (Object.values(self.filters.checkedCategories).includes(cat.category_id)) {
+              hasCategory = true;
+            }
+          });
+        }
+
+        return hasCategory && hasOrientation && hasSize && inPriceRange && hasDiscount;
+      } else {
+        return false;
+      }
     }
   },
   created: function created() {
-    this.$root.$on('update-categories', function (checkedCategories) {
-      this.checkedCategories = checkedCategories;
-      this.checkIfVisible(this.products);
+    this.$root.$on('update-filters', function (filters) {
+      this.filters = filters; //this.checkIfVisible(this.product);
     }.bind(this));
+    this.$root.$emit('fetch-filters');
   }
 });
 
@@ -5479,6 +5524,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -5530,17 +5591,39 @@ __webpack_require__.r(__webpack_exports__);
       poster: 0,
       selectedOrientation: 0,
       orientations: ["Landscape", "Portrait"],
+      availableOrientations: [],
       selectedSize: 0,
       sizes: ["Large", "Medium", "Small"],
+      availableSizesLandscape: [],
+      availableSizesPortrait: [],
+      orientationButtons: [],
+      sizeButtonsLandscape: [],
+      sizeButtonsPortrait: [],
       productDiscount: 1
     };
   },
   computed: {
     price: function price() {
-      return 0; //return (this.poster.price);
+      var price = 0;
+
+      if (this.selectedOrientation == 0) {
+        if (this.sizeButtonsLandscape.length > 0) {
+          if (this.sizeButtonsLandscape[this.selectedSize].disabled == false) {
+            price = this.getPrice();
+          }
+        }
+      } else if (this.selectedOrientation == 1) {
+        if (this.sizeButtonsPortrait.length > 0) {
+          if (this.sizeButtonsPortrait[this.selectedSize].disabled == false) {
+            price = this.getPrice();
+          }
+        }
+      }
+
+      return price;
     },
     discount: function discount() {
-      return 0; //return (this.poster.discount);
+      return 0;
     },
     originalPrice: function originalPrice() {
       return 0;
@@ -5553,15 +5636,18 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     productTitle: function productTitle() {
-      return 0;
+      return this.poster.name;
     }
   },
   methods: {
     showProduct: function showProduct() {
-      this.updateOrientationButtons();
-      this.updateSizeButtons();
       $('.product').fadeIn();
       $('.productBackground').fadeIn();
+      this.getVariationButtons();
+      this.$forceUpdate();
+      this.setAvailableVariations();
+      this.updateOrientationButtons();
+      this.updateSizeButtons();
     },
     hideProduct: function hideProduct() {
       $('.product').fadeOut();
@@ -5573,13 +5659,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     //loop through orientation buttons and set the current to 'selected'
     updateOrientationButtons: function updateOrientationButtons() {
-      var orientationButtons = document.querySelectorAll(".orientationButton");
-
-      for (var i = 0; i < orientationButtons.length; i++) {
-        orientationButtons[i].classList.remove("selected");
+      for (var i = 0; i < this.orientationButtons.length; i++) {
+        this.orientationButtons[i].classList.remove("selected");
       }
 
-      orientationButtons[this.selectedOrientation].classList.add("selected");
+      this.orientationButtons[this.selectedOrientation].classList.add("selected");
     },
     updateSize: function updateSize(index) {
       this.selectedSize = index;
@@ -5587,13 +5671,107 @@ __webpack_require__.r(__webpack_exports__);
     },
     //loop through size buttons and set the current to 'selected'
     updateSizeButtons: function updateSizeButtons() {
-      var sizeButtons = document.querySelectorAll(".sizeButton");
-
-      for (var i = 0; i < sizeButtons.length; i++) {
-        sizeButtons[i].classList.remove("selected");
+      for (var i = 0; i < this.sizeButtonsLandscape.length; i++) {
+        this.sizeButtonsLandscape[i].classList.remove("selected");
       }
 
-      sizeButtons[this.selectedSize].classList.add("selected");
+      for (var _i = 0; _i < this.sizeButtonsPortrait.length; _i++) {
+        this.sizeButtonsPortrait[_i].classList.remove("selected");
+      }
+
+      this.sizeButtonsLandscape[this.selectedSize].classList.add("selected");
+      this.sizeButtonsPortrait[this.selectedSize].classList.add("selected");
+    },
+    setAvailableVariations: function setAvailableVariations() {
+      if ('product_variations' in this.poster) {
+        self = this;
+        self.availableOrientations = [];
+        self.availableSizes = [];
+        self.poster.product_variations.forEach(function (variations) {
+          if (variations.orientation_id == 1) {
+            self.availableOrientations.push("Landscape");
+
+            if (variations.size_id == 1) {
+              self.availableSizesLandscape.push("Large");
+            } else if (variations.size_id == 2) {
+              self.availableSizesLandscape.push("Medium");
+            } else if (variations.size_id == 3) {
+              self.availableSizesLandscape.push("Small");
+            }
+          }
+
+          if (variations.orientation_id == 2) {
+            self.availableOrientations.push("Portrait");
+
+            if (variations.size_id == 1) {
+              self.availableSizesPortrait.push("Large");
+            } else if (variations.size_id == 2) {
+              self.availableSizesPortrait.push("Medium");
+            } else if (variations.size_id == 3) {
+              self.availableSizesPortrait.push("Small");
+            }
+          }
+        }); //return unique entries in arrays
+
+        self.availableOrientations = _toConsumableArray(new Set(self.availableOrientations));
+        self.availableSizesLandscape = _toConsumableArray(new Set(self.availableSizesLandscape));
+        self.availableSizesPortrait = _toConsumableArray(new Set(self.availableSizesPortrait));
+
+        if (!self.availableOrientations.includes("Landscape")) {
+          this.orientationButtons[0].disabled = true;
+        }
+
+        if (!self.availableOrientations.includes("Portrait")) {
+          this.orientationButtons[1].disabled = true;
+        }
+
+        if (self.selectedOrientation == 0) {
+          if (!self.availableSizesLandscape.includes("Large")) {
+            this.sizeButtonsLandscape[0].disabled = true;
+          }
+
+          if (!self.availableSizesLandscape.includes("Medium")) {
+            this.sizeButtonsLandscape[1].disabled = true;
+          }
+
+          if (!self.availableSizesLandscape.includes("Small")) {
+            this.sizeButtonsLandscape[2].disabled = true;
+          }
+        } else if (self.selectedOrientation == 1) {
+          if (!self.availableSizesPortrait.includes("Large")) {
+            this.sizeButtonsPortrait[0].disabled = true;
+          }
+
+          if (!self.availableSizesPortrait.includes("Medium")) {
+            this.sizeButtonsPortrait[1].disabled = true;
+          }
+
+          if (!self.availableSizesPortrait.includes("Small")) {
+            this.sizeButtonsPortrait[2].disabled = true;
+          }
+        }
+      }
+    },
+    getPrice: function getPrice() {
+      var price = 0;
+
+      if ('product_variations' in this.poster) {
+        self = this;
+        self.availableOrientations = [];
+        self.availableSizes = [];
+        self.poster.product_variations.forEach(function (variations) {
+          if (variations.orientation_id == self.selectedOrientation + 1 && variations.size_id == self.selectedSize + 1) {
+            price = variations.size.price;
+          }
+        });
+      }
+
+      return price;
+    },
+    getVariationButtons: function getVariationButtons() {
+      this.orientationButtons = document.querySelectorAll(".orientationButton");
+      this.sizeButtonsLandscape = document.querySelectorAll(".sizeButtonLandscape");
+      this.sizeButtonsPortrait = document.querySelectorAll(".sizeButtonPortrait");
     },
     //emit to the event bus (app.js) which item was added, the event bus is visible to all components
     addToCart: function addToCart(poster, orientation, size) {
@@ -5696,7 +5874,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('ProductFilters Component mounted.');
@@ -5704,17 +5881,94 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       categories: [],
-      checkedCategories: []
+      filters: {
+        checkedCategories: [],
+        orientationLandscape: true,
+        orientationPortrait: true,
+        sizeLarge: true,
+        sizeMedium: true,
+        sizeSmall: true,
+        priceLow: 0,
+        priceHigh: 9999,
+        checkedDiscount: false
+      }
     };
   },
   methods: {
-    updateCategories: function updateCategories() {
-      this.$root.$emit('update-categories', this.checkedCategories);
+    updateFilters: function updateFilters() {
+      this.$root.$emit('update-filters', this.filters);
+    },
+    loadMoreProducts: function loadMoreProducts() {
+      this.$root.$emit('load-more-products');
+    }
+  },
+  computed: {
+    //filters computed into parts for Watch
+    checkedCategories: function checkedCategories() {
+      this.loadMoreProducts();
+      return this.filters.checkedCategories;
+    },
+    orientationLandscape: function orientationLandscape() {
+      this.loadMoreProducts();
+      return this.filters.orientationLandscape;
+    },
+    orientationPortrait: function orientationPortrait() {
+      this.loadMoreProducts();
+      return this.filters.orientationPortrait;
+    },
+    sizeLarge: function sizeLarge() {
+      this.loadMoreProducts();
+      return this.filters.sizeLarge;
+    },
+    sizeMedium: function sizeMedium() {
+      this.loadMoreProducts();
+      return this.filters.sizeMedium;
+    },
+    sizeSmall: function sizeSmall() {
+      this.loadMoreProducts();
+      return this.filters.sizeSmall;
+    },
+    priceLow: function priceLow() {
+      this.loadMoreProducts();
+      return this.filters.priceLow;
+    },
+    priceHigh: function priceHigh() {
+      this.loadMoreProducts();
+      return this.filters.priceHigh;
+    },
+    checkedDiscount: function checkedDiscount() {
+      this.loadMoreProducts();
+      return this.filters.checkedDiscount;
     }
   },
   watch: {
-    checkedCategories: function checkedCategories(cat) {
-      this.updateCategories(cat);
+    //watch for changes in filters (split up in parts, because converting to deepscan would take too long)
+    checkedCategories: function checkedCategories() {
+      this.updateFilters();
+    },
+    orientationLandscape: function orientationLandscape() {
+      this.updateFilters();
+    },
+    orientationPortrait: function orientationPortrait() {
+      this.updateFilters();
+    },
+    sizeLarge: function sizeLarge() {
+      this.updateFilters();
+    },
+    sizeMedium: function sizeMedium() {
+      this.updateFilters();
+    },
+    sizeSmall: function sizeSmall() {
+      this.updateFilters();
+    },
+    priceLow: function priceLow() {
+      this.updateFilters();
+    },
+    priceHigh: function priceHigh() {
+      this.updateFilters();
+    },
+    checkedDiscount: function checkedDiscount() {
+      this.updateFilters();
     }
   },
   created: function created() {
@@ -5729,6 +5983,9 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       self.categories = response.data.categories;
     })["catch"](function (response) {});
+    this.$root.$on('fetch-filters', function () {
+      this.updateFilters();
+    }.bind(this));
   }
 });
 
@@ -5752,6 +6009,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('Products Component mounted.');
@@ -5760,11 +6020,26 @@ __webpack_require__.r(__webpack_exports__);
     return {
       products: [],
       page: 1,
-      checkedCategories: []
+      filters: {
+        checkedCategories: [],
+        orientationLandscape: true,
+        orientationPortrait: true,
+        sizeLarge: true,
+        sizeMedium: true,
+        sizeSmall: true,
+        priceLow: 0,
+        priceHigh: 9999,
+        checkedDiscount: false
+      }
     };
   },
   props: {},
   methods: {
+    resetInfiniteLoadingState: function resetInfiniteLoadingState() {
+      if (this.$refs.infiniteLoading) {
+        this.$refs.infiniteLoading.stateChanger.reset();
+      }
+    },
     handleLoadMore: function handleLoadMore($state) {
       var _this = this;
 
@@ -5802,8 +6077,11 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       self.products = response.data.products;
     })["catch"](function (response) {});
-    this.$root.$on('update-categories', function (checkedCategories) {
-      this.checkedCategories = checkedCategories;
+    this.$root.$on('update-filters', function (filters) {
+      this.filters = filters;
+    }.bind(this));
+    this.$root.$on('load-more-products', function () {
+      this.resetInfiniteLoadingState();
     }.bind(this));
   }
 });
@@ -39867,7 +40145,7 @@ var render = function () {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "product-info" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.poster.title))]),
+          _c("h1", [_vm._v(_vm._s(this.productTitle))]),
           _vm._v(" "),
           _c(
             "div",
@@ -39898,29 +40176,70 @@ var render = function () {
           _vm._v(" "),
           _c(
             "div",
-            _vm._l(_vm.sizes, function (size, index) {
-              return _c(
-                "button",
-                {
-                  key: index,
-                  staticClass: "sizeButton",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function ($event) {
-                      return _vm.updateSize(index)
+            [
+              _vm._l(_vm.sizes, function (size, index) {
+                return _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.selectedOrientation == 0,
+                        expression: "selectedOrientation == 0",
+                      },
+                    ],
+                    key: index,
+                    staticClass: "sizeButtonLandscape",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.updateSize(index)
+                      },
                     },
                   },
-                },
-                [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(size) +
-                      "\n                    "
-                  ),
-                ]
-              )
-            }),
-            0
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(size) +
+                        "\n                    "
+                    ),
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _vm._l(_vm.sizes, function (size, index) {
+                return _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.selectedOrientation == 1,
+                        expression: "selectedOrientation == 1",
+                      },
+                    ],
+                    key: index + 3,
+                    staticClass: "sizeButtonPortrait",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.updateSize(index)
+                      },
+                    },
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(size) +
+                        "\n                    "
+                    ),
+                  ]
+                )
+              }),
+            ],
+            2
           ),
           _vm._v(" "),
           _c("div", { staticClass: "price" }, [_vm._v("Price:")]),
@@ -39947,7 +40266,7 @@ var render = function () {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "price" }, [
-            _vm._v("$" + _vm._s(_vm.price) + ",-"),
+            _vm._v("$" + _vm._s(this.price) + ",-"),
           ]),
           _vm._v(" "),
           _c(
@@ -40010,25 +40329,438 @@ var render = function () {
           [
             _c("p", [_vm._v("Orientation")]),
             _vm._v(" "),
-            _vm._m(0),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.orientationLandscape,
+                    expression: "filters.orientationLandscape",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  value: "",
+                  id: "filterLandscape",
+                  checked: "",
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.orientationLandscape)
+                    ? _vm._i(_vm.filters.orientationLandscape, "") > -1
+                    : _vm.filters.orientationLandscape,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.orientationLandscape,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "orientationLandscape",
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "orientationLandscape",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "orientationLandscape", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckDefault" },
+                },
+                [
+                  _vm._v(
+                    "\n                    Landscape\n                    "
+                  ),
+                ]
+              ),
+            ]),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.orientationPortrait,
+                    expression: "filters.orientationPortrait",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  value: "",
+                  id: "filterPortrait",
+                  checked: "",
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.orientationPortrait)
+                    ? _vm._i(_vm.filters.orientationPortrait, "") > -1
+                    : _vm.filters.orientationPortrait,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.orientationPortrait,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "orientationPortrait",
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "orientationPortrait",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "orientationPortrait", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckChecked" },
+                },
+                [_vm._v("\n                    Portrait\n                    ")]
+              ),
+            ]),
             _vm._v(" "),
             _c("p", [_vm._v("Size")]),
             _vm._v(" "),
-            _vm._m(2),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.sizeLarge,
+                    expression: "filters.sizeLarge",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  value: "",
+                  id: "filterLarge",
+                  checked: "",
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.sizeLarge)
+                    ? _vm._i(_vm.filters.sizeLarge, "") > -1
+                    : _vm.filters.sizeLarge,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.sizeLarge,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.filters, "sizeLarge", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "sizeLarge",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "sizeLarge", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckDefault" },
+                },
+                [_vm._v("\n                    Large\n                    ")]
+              ),
+            ]),
             _vm._v(" "),
-            _vm._m(3),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.sizeMedium,
+                    expression: "filters.sizeMedium",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  value: "",
+                  id: "filterMedium",
+                  checked: "",
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.sizeMedium)
+                    ? _vm._i(_vm.filters.sizeMedium, "") > -1
+                    : _vm.filters.sizeMedium,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.sizeMedium,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.filters, "sizeMedium", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "sizeMedium",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "sizeMedium", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckChecked" },
+                },
+                [_vm._v("\n                    Medium\n                    ")]
+              ),
+            ]),
             _vm._v(" "),
-            _vm._m(4),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.sizeSmall,
+                    expression: "filters.sizeSmall",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  value: "",
+                  id: "filterSmall",
+                  checked: "",
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.sizeSmall)
+                    ? _vm._i(_vm.filters.sizeSmall, "") > -1
+                    : _vm.filters.sizeSmall,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.sizeSmall,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.filters, "sizeSmall", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "sizeSmall",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "sizeSmall", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckChecked" },
+                },
+                [_vm._v("\n                    Small\n                    ")]
+              ),
+            ]),
             _vm._v(" "),
             _c("p", [_vm._v("Price")]),
             _vm._v(" "),
-            _vm._m(5),
+            _c("div", { staticClass: "input-group mb-3" }, [
+              _c("span", { staticClass: "input-group-text" }, [_vm._v("Min:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.priceLow,
+                    expression: "filters.priceLow",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  "aria-label": "Minimum price",
+                  value: "0",
+                  id: "filterMinPrice",
+                },
+                domProps: { value: _vm.filters.priceLow },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.filters, "priceLow", $event.target.value)
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
+            ]),
             _vm._v(" "),
-            _vm._m(6),
+            _c("div", { staticClass: "input-group mb-3" }, [
+              _c("span", { staticClass: "input-group-text" }, [_vm._v("Max:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.priceHigh,
+                    expression: "filters.priceHigh",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  "aria-label": "Maximum price",
+                  value: "9999",
+                  id: "filterMaxPrice",
+                },
+                domProps: { value: _vm.filters.priceHigh },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.filters, "priceHigh", $event.target.value)
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
+            ]),
             _vm._v(" "),
-            _vm._m(7),
+            _c("div", { staticClass: "form-check" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filters.checkedDiscount,
+                    expression: "filters.checkedDiscount",
+                  },
+                ],
+                staticClass: "form-check-input",
+                attrs: { type: "checkbox", value: "", id: "filterDiscount" },
+                domProps: {
+                  checked: Array.isArray(_vm.filters.checkedDiscount)
+                    ? _vm._i(_vm.filters.checkedDiscount, "") > -1
+                    : _vm.filters.checkedDiscount,
+                },
+                on: {
+                  change: function ($event) {
+                    var $$a = _vm.filters.checkedDiscount,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = "",
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "checkedDiscount",
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.filters,
+                            "checkedDiscount",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.filters, "checkedDiscount", $$c)
+                    }
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "form-check-label",
+                  attrs: { for: "flexCheckChecked" },
+                },
+                [
+                  _vm._v(
+                    "\n                    Discount only\n                    "
+                  ),
+                ]
+              ),
+            ]),
             _vm._v(" "),
             _c("p", [_vm._v("Category")]),
             _vm._v(" "),
@@ -40040,21 +40772,22 @@ var render = function () {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.checkedCategories,
-                        expression: "checkedCategories",
+                        value: _vm.filters.checkedCategories,
+                        expression: "filters.checkedCategories",
                       },
                     ],
                     staticClass: "form-check-input",
                     attrs: { type: "checkbox", id: category.id },
                     domProps: {
                       value: category.id,
-                      checked: Array.isArray(_vm.checkedCategories)
-                        ? _vm._i(_vm.checkedCategories, category.id) > -1
-                        : _vm.checkedCategories,
+                      checked: Array.isArray(_vm.filters.checkedCategories)
+                        ? _vm._i(_vm.filters.checkedCategories, category.id) >
+                          -1
+                        : _vm.filters.checkedCategories,
                     },
                     on: {
                       change: function ($event) {
-                        var $$a = _vm.checkedCategories,
+                        var $$a = _vm.filters.checkedCategories,
                           $$el = $event.target,
                           $$c = $$el.checked ? true : false
                         if (Array.isArray($$a)) {
@@ -40062,15 +40795,21 @@ var render = function () {
                             $$i = _vm._i($$a, $$v)
                           if ($$el.checked) {
                             $$i < 0 &&
-                              (_vm.checkedCategories = $$a.concat([$$v]))
+                              _vm.$set(
+                                _vm.filters,
+                                "checkedCategories",
+                                $$a.concat([$$v])
+                              )
                           } else {
                             $$i > -1 &&
-                              (_vm.checkedCategories = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
+                              _vm.$set(
+                                _vm.filters,
+                                "checkedCategories",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
                           }
                         } else {
-                          _vm.checkedCategories = $$c
+                          _vm.$set(_vm.filters, "checkedCategories", $$c)
                         }
                       },
                     },
@@ -40093,12 +40832,6 @@ var render = function () {
                 ]),
               ])
             }),
-            _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-              [_vm._v("Search")]
-            ),
           ],
           2
         ),
@@ -40106,159 +40839,7 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "checkbox",
-          value: "",
-          id: "filterLandscape",
-          checked: "",
-        },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckDefault" } },
-        [_vm._v("\n                    Landscape\n                    ")]
-      ),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "checkbox",
-          value: "",
-          id: "filterPortrait",
-          checked: "",
-        },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
-        [_vm._v("\n                    Portrait\n                    ")]
-      ),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: { type: "checkbox", value: "", id: "filterLarge", checked: "" },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckDefault" } },
-        [_vm._v("\n                    Large\n                    ")]
-      ),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: { type: "checkbox", value: "", id: "filterMedium", checked: "" },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
-        [_vm._v("\n                    Medium\n                    ")]
-      ),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: { type: "checkbox", value: "", id: "filterSmall", checked: "" },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
-        [_vm._v("\n                    Small\n                    ")]
-      ),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group mb-3" }, [
-      _c("span", { staticClass: "input-group-text" }, [_vm._v("Min:")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          "aria-label": "Minimum price",
-          value: "0",
-          id: "filterMinPrice",
-        },
-      }),
-      _vm._v(" "),
-      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group mb-3" }, [
-      _c("span", { staticClass: "input-group-text" }, [_vm._v("Max:")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          "aria-label": "Maximum price",
-          id: "filterMaxPrice",
-        },
-      }),
-      _vm._v(" "),
-      _c("span", { staticClass: "input-group-text" }, [_vm._v("€")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: { type: "checkbox", value: "", id: "filterPortrait" },
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "flexCheckChecked" } },
-        [_vm._v("\n                    Discount only\n                    ")]
-      ),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -40296,7 +40877,15 @@ var render = function () {
         })
       }),
       _vm._v(" "),
-      _c("infinite-loading", { on: { infinite: _vm.handleLoadMore } }),
+      _c(
+        "infinite-loading",
+        { ref: "infiniteLoading", on: { infinite: _vm.handleLoadMore } },
+        [
+          _c("div", { attrs: { slot: "no-more" }, slot: "no-more" }),
+          _vm._v(" "),
+          _c("div", { attrs: { slot: "no-results" }, slot: "no-results" }),
+        ]
+      ),
     ],
     2
   )

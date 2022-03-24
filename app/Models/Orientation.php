@@ -12,7 +12,6 @@ class Orientation extends Model
     protected $table = 'orientations';
 
     protected $fillable = [
-        'product_id',
-        'variation_id'
+        'name',
     ];
 }

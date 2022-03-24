@@ -13,6 +13,7 @@ class Product_category extends Model
 
     protected $fillable = [
         'product_id',
+        'category_id',
     ];
 
     protected $casts = [

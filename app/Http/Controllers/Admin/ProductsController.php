@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Product_variation;
 
 class ProductsController extends Controller
 {
@@ -29,19 +28,39 @@ class ProductsController extends Controller
 
     public function show($id)
     {
-        $product = Product::find($id);
-        $test = Product_variation::all();
+        $productId = Product::find($id);
+        Product::with('variations', 'size')->get();
+
         return view('admin-products.show', [
-            'product' => $product,
-            'image'   => '/public/images/posters/portrait/1.jpg'
+            'product' => $productId,
         ]);
     }
 
-    // public function Edit($id){
+    public function edit($id)
+    {
+        $productId = Product::find($id);
+
+        return view('admin-products.edit', [
+            'method'  => 'POST',
+            'product' => $productId,
+            'action'  => '/admin-products/' . $id . '/update',   
+        ]);
+    }
+
+    public function update($id)
+    {
+        $product = $_POST;
+
+        //  $product['updated_by'] = Helper::getUserIdFromSession();
+         $product['updated_at'] = date('Y-m-d H:i:s');
         
-        
-    //     
-    //     return view('admin.category.edit',compact('categories'));
-    // }
+         Product::find($id)->update($product);
+        //  Product::find($id)->update([
+        //      'name' => $product,
+        //      'stock' => $product->variations[0],
+        //  ]);
+
+        return redirect()->route('admin-products.index')->with('success', 'Product updated successfully');
+    }
 
 }

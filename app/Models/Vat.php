@@ -10,4 +10,9 @@ class Vat extends Model
     use HasFactory;
 
     protected $table = 'vat';
+
+    protected $fillable = [
+        'name',
+        'percentage',
+    ];
 }

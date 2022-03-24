@@ -16,6 +16,7 @@ class Product extends Model
         'discount_percentage',
         'vat_id',
         'name',
+        'created_at'
     ];
 
     protected $hidden = [

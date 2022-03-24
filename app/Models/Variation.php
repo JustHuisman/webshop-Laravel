@@ -16,6 +16,7 @@ class Variation extends Model
         'size_id',
         'orientation_id',
         'stock',
+        'created_at'
     ];
 
     protected $with = [

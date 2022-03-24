@@ -20,8 +20,20 @@
 
                     {{ __('Edit form:') }}
                 </div>
+
+                @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Error!</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li></li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
                 <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
                 @csrf
+                @method('PUT')
                     <div class="container mt-5">
                         <div class="row mb-3">
                             <div class="col-md-4">

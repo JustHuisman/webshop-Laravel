@@ -47,18 +47,19 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function update($id)
-    {
-        $product = $_POST;
 
-        //  $product['updated_by'] = Helper::getUserIdFromSession();
-         $product['updated_at'] = date('Y-m-d H:i:s');
+    public function update($id)
+    {   
+        $data = $_POST;
+
+        //hier zit je product in.
+        $product = Product::find($id);
         
-         Product::find($id)->update($product);
-        //  Product::find($id)->update([
-        //      'name' => $product,
-        //      'stock' => $product->variations[0],
-        //  ]);
+        //update je product data.
+        $product->update($data);
+
+        //update de variatie data.
+        $product->variations->first()->update($data);
 
         return redirect()->route('admin-products.index')->with('success', 'Product updated successfully');
     }

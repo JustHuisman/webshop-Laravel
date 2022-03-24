@@ -110,7 +110,10 @@ button:active{
 button.orientationButton.selected{
     background-color: #64afe4;
 }
-button.sizeButton.selected{
+button.sizeButtonLandscape.selected{
+    background-color: #64afe4;
+}
+button.sizeButtonPortrait.selected{
     background-color: #64afe4;
 }
 

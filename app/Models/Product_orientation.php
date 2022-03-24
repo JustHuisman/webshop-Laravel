@@ -17,7 +17,7 @@ class Product_orientation extends Model
 
     public function orientations()
     {
-        return $this->belongsTo(Product_variation::class);
+        return $this->belongsTo(Variation::class);
     }
 
 }

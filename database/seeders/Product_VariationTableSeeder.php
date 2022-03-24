@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product_variation;
+use App\Models\Variation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,7 +21,7 @@ class Product_VariationTableSeeder extends Seeder
         foreach ($productvariations as $productvariation) {
             for ($i = 1; $i < 3; $i++) {
                 for ($j = 1; $j < 4; $j++) {
-                    Product_variation::create([
+                    Variation::create([
                         'product_id'     => $productvariation['id'],
                         'stock'          => $productvariation['stock'],
                         'orientation_id' => $i,

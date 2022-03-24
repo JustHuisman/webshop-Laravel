@@ -21,9 +21,10 @@
                     {{ __('Product details:') }}
                 </div>
                 <ul>
-                    <li> {{ $product->name }} </li>
+                   <li> Name: {{ $product->name }} </li>
                    <li> <img src="{{URL::asset('/images/posters/portrait/').'/'.$product->id.'.jpg'}}" alt="{{$product->name}}" height="200" width="200"> </li>
-                   <li> {{ $test->stock }} </li>   
+                   <li> Stock: {{ $product->variations[0]->stock }} </li>
+                   <li> Price: {{ $product->variations[0]->size->price }} </li>
                 </ul>
             </div>
             <a href="/admin-products/{{$product->id}}/edit">

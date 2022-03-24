@@ -8,7 +8,7 @@ use App\Models\Category;
 
 // use App\Models\Product;
 // use App\Models\Product_size;
-// use App\Models\Product_variation;
+// use App\Models\Variation;
 
 class HomeController extends Controller
 {
@@ -21,12 +21,12 @@ class HomeController extends Controller
     {        
         // $categories = Category::all();
         // $products = Product::all();
-        // $productVariations = Product_variation::all();
+        // $variations = Variation::all();
 
         return view('home', 
             // 'categories' => $categories,
             // 'products' => $products,
-            // 'product_variations' => $productVariations,
+            // 'variations' => $variations,
         );
     }
 

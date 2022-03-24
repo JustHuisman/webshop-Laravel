@@ -15,7 +15,7 @@ class Product extends Model
         'amount_sold',
         'discount_percentage',
         'vat_id',
- 
+        'name',
     ];
 
     protected $hidden = [
@@ -26,7 +26,8 @@ class Product extends Model
 
     protected $with = [
         'productCategories',
-        'productVariations',
+        'variations',
+        'size'
     ];
 
     public function productCategories()
@@ -34,9 +35,14 @@ class Product extends Model
         return $this->hasMany(Product_category::class);
     }
 
-    public function productVariations()
+    public function variations()
     {
-        return $this->hasMany(Product_variation::class);
+        return $this->hasMany(Variation::class);
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
     }
 }
 

@@ -28,7 +28,8 @@ class Product extends Model
     protected $with = [
         'productCategories',
         'variations',
-        'size'
+        'size',
+        'order_details'
     ];
 
     public function productCategories()
@@ -44,6 +45,11 @@ class Product extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function order_details()
+    {
+        return $this->hasMany(Order_detail::class);
     }
 }
 

@@ -20,9 +20,15 @@ class Variation extends Model
     ];
 
     protected $with = [
+        'product',
         'size',
         'orientation'
     ];
+
+    public function product()
+    {
+    return $this->belongsTo(Product::class);    
+    }
 
     public function size()
     {

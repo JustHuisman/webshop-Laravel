@@ -20,17 +20,7 @@
 
                     {{ __('Edit form:') }}
                 </div>
-
-                @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Error!</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li></li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+                
                 <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
                 @csrf
                 @method('PUT')
@@ -54,9 +44,10 @@
                             </div>
                         </div>
 
+
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="text" name="price" placeholder="Price" value="{{ isset($product) ? $product->variations[0]->size->price  : '' }}">
+                                <input type="submit" name="vat_id" placeholder="Vat" value="{{ isset($product) ? $product->vat_id  : '' }}">
                             </div>
                         </div>
 

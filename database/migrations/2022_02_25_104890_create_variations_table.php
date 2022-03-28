@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('orientation_id');
             $table->foreign('orientation_id')->references('id')->on('orientations');
             $table->unsignedBigInteger('size_id');

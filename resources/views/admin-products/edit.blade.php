@@ -20,8 +20,10 @@
 
                     {{ __('Edit form:') }}
                 </div>
+                
                 <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
                 @csrf
+                @method('PUT')
                     <div class="container mt-5">
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -42,9 +44,10 @@
                             </div>
                         </div>
 
+
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="text" name="price" placeholder="Price" value="{{ isset($product) ? $product->variations[0]->size->price  : '' }}">
+                                <input type="submit" name="vat_id" placeholder="Vat" value="{{ isset($product) ? $product->vat_id  : '' }}">
                             </div>
                         </div>
 

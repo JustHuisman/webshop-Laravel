@@ -51,14 +51,17 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); //delete this line and put it to middleware later
 
 Route::get('/admin-products', [ProductsController::class, 'index'])->name('admin-products.index');
-Route::get('/admin-products/{id}', [ProductsController::class, 'show'])->name('admin-products.show');
+
+Route::get('/admin-products/create', [ProductsController::class, 'create'])->name('admin-products.create');
+Route::post('/admin-products/store', [ProductsController::class, 'store'])->name('admin-products.store');
+Route::get('/admin-products/{id}', [ProductsController::class, 'variation'])->name('admin-products.variation');
+Route::get('/admin-products/{id}/variation', [ProductsController::class, 'show'])->name('admin-products.show');
 Route::get('/admin-products/{id}/edit', [ProductsController::class, 'edit'])->name('admin-products.edit');
-Route::post('/admin-products/{id}/update', [ProductsController::class, 'update'])->name('admin-products.update');
+Route::put('/admin-products/{id}/update', [ProductsController::class, 'update'])->name('admin-products.update');
+Route::get('/admin-products/{id}/destroy', [ProductsController::class, 'destroy'])->name('admin-products.destroy');
 
-
-
-Route::get('/admin-users', [UsersController::class, 'index'])->name('admin-users.index');
-Route::get('/admin-returns', [ReturnsController::class, 'index'])->name('admin-returns.index');
+Route::resource('/admin-users', UsersController::class)->names('admin-users');
+Route::resource('/admin-returns', ReturnsController::class)->names('admin-returns');
 
 
 

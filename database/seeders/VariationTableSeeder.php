@@ -6,24 +6,24 @@ use App\Models\Variation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class Product_VariationTableSeeder extends Seeder
+class VariationTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run($productvariations)
+    public function run($variations)
     {
  
         //data in DatabaseSeeder.php
 
-        foreach ($productvariations as $productvariation) {
+        foreach ($variations as $variation) {
             for ($i = 1; $i < 3; $i++) {
                 for ($j = 1; $j < 4; $j++) {
                     Variation::create([
-                        'product_id'     => $productvariation['id'],
-                        'stock'          => $productvariation['stock'],
+                        'product_id'     => $variation['id'],
+                        'stock'          => $variation['stock'],
                         'orientation_id' => $i,
                         'size_id'        => $j
                         ]);

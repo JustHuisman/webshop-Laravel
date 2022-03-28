@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('amount_sold');
-            $table->decimal('discount_percentage');
+            $table->integer('amount_sold')->nullable();
+            $table->decimal('discount_percentage')->nullable();
             $table->unsignedBigInteger('vat_id');
             $table->foreign('vat_id')->references('id')->on('vat');
             $table->timestamps();

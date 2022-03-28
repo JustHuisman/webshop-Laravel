@@ -16,18 +16,13 @@ class Product extends Model
         'discount_percentage',
         'vat_id',
         'name',
+        'created_at'
     ];
 
     protected $hidden = [
         'created_by',
         'updated_by',
         'deleted_by',
-    ];
-
-    protected $with = [
-        'productCategories',
-        'variations',
-        'size'
     ];
 
     public function productCategories()
@@ -43,6 +38,11 @@ class Product extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function order_details()
+    {
+        return $this->hasMany(Order_detail::class);
     }
 }
 

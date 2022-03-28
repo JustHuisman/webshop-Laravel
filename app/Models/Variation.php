@@ -16,12 +16,19 @@ class Variation extends Model
         'size_id',
         'orientation_id',
         'stock',
+        'created_at'
     ];
 
     protected $with = [
+        'product',
         'size',
         'orientation'
     ];
+
+    public function product()
+    {
+    return $this->belongsTo(Product::class);    
+    }
 
     public function size()
     {

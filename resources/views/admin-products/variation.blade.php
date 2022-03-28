@@ -21,9 +21,11 @@
 
                     {{ __('Choose a variation:') }}
                 </div>
-                    @foreach ($variations as $variation)
+
+                @foreach ($variations as $variation)
                           {{ $variation->id }}
-                    @endforeach
+                @endforeach
+                
             </div>
             <a href="/admin-products/{{$product->id}}./{{$product->variation}}">
                 <button>Next</button>

@@ -55,7 +55,7 @@ Route::get('/admin-products', [ProductsController::class, 'index'])->name('admin
 Route::get('/admin-products/create', [ProductsController::class, 'create'])->name('admin-products.create');
 Route::post('/admin-products/store', [ProductsController::class, 'store'])->name('admin-products.store');
 Route::get('/admin-products/{id}', [ProductsController::class, 'variation'])->name('admin-products.variation');
-Route::get('/admin-products/{id}/{id}', [ProductsController::class, 'show'])->name('admin-products.show');
+Route::get('/admin-products/{id}/variation', [ProductsController::class, 'show'])->name('admin-products.show');
 Route::get('/admin-products/{id}/edit', [ProductsController::class, 'edit'])->name('admin-products.edit');
 Route::put('/admin-products/{id}/update', [ProductsController::class, 'update'])->name('admin-products.update');
 Route::get('/admin-products/{id}/destroy', [ProductsController::class, 'destroy'])->name('admin-products.destroy');

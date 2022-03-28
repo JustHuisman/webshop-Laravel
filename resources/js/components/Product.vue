@@ -51,8 +51,8 @@
                 //check if the product exists
                 if(_product){
                     //variations
-                    if('product_variations' in _product){
-                        _product.product_variations.forEach(function (variations) {
+                    if('variations' in _product){
+                        _product.variations.forEach(function (variations) {
                             if(variations.orientation_id == 1 && self.filters.orientationLandscape == true){
                                hasOrientation = true;
                             }

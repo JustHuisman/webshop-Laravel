@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <!-- PRODUCT FILTERS -->
-                <product-filters :filters="filters" ></product-filters>
+                <product-filters></product-filters>
                 <div>
                     <div class="form-check">
                         </label>

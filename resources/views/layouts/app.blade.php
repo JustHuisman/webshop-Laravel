@@ -89,7 +89,7 @@
                             </li>
                         @endguest
                         <li class="nav-item">
-                            
+                            <shopping-cart ref="shoppingCart"></shopping-cart>
                         </li>
                     </ul>
                 </div>

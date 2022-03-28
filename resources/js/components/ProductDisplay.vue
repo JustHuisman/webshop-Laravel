@@ -8,7 +8,7 @@
                 </div>
                 <div class="product-image">
                     <div class="image">
-                        <div v-if="discount > 0" class="sale">{{discount}}</div>
+                        <div v-if="discount > 0" class="sale">{{discount}}&#37;</div>
                         <img v-if="poster !== 0" v-bind:src="image">
                     </div>
                 </div>
@@ -33,9 +33,9 @@
                     <div class="price">Price:</div>
                     <div v-show="originalPrice!== 0" class="price"
                         style="text-decoration: line-through; color: gray;">
-                        &#36;{{ originalPrice }},-</div>
-                    <div class="price">&#36;{{ this.price }},-</div>
-                    <button v-on:click="addToCart(poster, orientations[selectedOrientation], sizes[selectedSize])">Add to Cart
+                        &euro;{{ originalPrice }}</div>
+                    <div class="price">&euro;{{ this.price }}</div>
+                    <button v-on:click="addToCart(poster, orientations[selectedOrientation], sizes[selectedSize], price, discount, originalPrice)">Add to Cart
                     </button>
                 </div>
             </div>
@@ -71,23 +71,38 @@
                 if(this.selectedOrientation == 0){
                     if(this.sizeButtonsLandscape.length > 0){
                         if(this.sizeButtonsLandscape[this.selectedSize].disabled == false){
-                            price = this.getPrice();
+                            price = this.getPrice("discounted");
                         }
                     }
                 } else if(this.selectedOrientation == 1){
                     if(this.sizeButtonsPortrait.length > 0){
                         if(this.sizeButtonsPortrait[this.selectedSize].disabled == false){
-                            price = this.getPrice();
+                            price = this.getPrice("discounted");
                         }
                     }
                 }
                 return price;
             },
             discount(){
-                return 0;
+                self = this;
+                return parseFloat(self.poster.discount_percentage);
             },
             originalPrice(){
-                return 0;
+                let price = 0;
+                if(this.selectedOrientation == 0){
+                    if(this.sizeButtonsLandscape.length > 0){
+                        if(this.sizeButtonsLandscape[this.selectedSize].disabled == false){
+                            price = this.getPrice("original");
+                        }
+                    }
+                } else if(this.selectedOrientation == 1){
+                    if(this.sizeButtonsPortrait.length > 0){
+                        if(this.sizeButtonsPortrait[this.selectedSize].disabled == false){
+                            price = this.getPrice("original");
+                        }
+                    }
+                }
+                return price;
             },
             image(){
                 if(this.selectedOrientation === 0){
@@ -142,11 +157,11 @@
                 this.sizeButtonsPortrait[this.selectedSize].classList.add("selected");
             },
             setAvailableVariations: function(){
-                if('product_variations' in this.poster){
+                if('variations' in this.poster){
                     self = this;
                     self.availableOrientations = [];
                     self.availableSizes = [];
-                    self.poster.product_variations.forEach(function (variations) {
+                    self.poster.variations.forEach(function (variations) {
                         if(variations.orientation_id == 1){
                             self.availableOrientations.push("Landscape");
 
@@ -205,15 +220,21 @@
                     }
                 }
             },
-            getPrice: function(){
+            getPrice: function(method){
                 let price = 0;
-                if('product_variations' in this.poster){
+                if('variations' in this.poster){
                     self = this;
                     self.availableOrientations = [];
                     self.availableSizes = [];
-                    self.poster.product_variations.forEach(function (variations) {
+                    self.poster.variations.forEach(function (variations) {
                         if(variations.orientation_id == (self.selectedOrientation + 1) && variations.size_id == (self.selectedSize +1)){
-                            price = variations.size.price;
+                            let priceTemp = parseFloat(variations.size.price);
+                            let discount = parseFloat(self.poster.discount_percentage);
+                            if(method === "discounted"){
+                                price = (priceTemp - (priceTemp / 100 * discount)).toFixed(2);
+                            } else if(method === "original"){
+                                price = (priceTemp).toFixed(2);
+                            }
                         }
                     })
                 }   
@@ -225,8 +246,8 @@
                 this.sizeButtonsPortrait = document.querySelectorAll(".sizeButtonPortrait");
             },
             //emit to the event bus (app.js) which item was added, the event bus is visible to all components
-            addToCart: function(poster, orientation, size) {
-                this.$root.$emit('add-to-cart', poster, orientation, size);
+            addToCart: function(poster, orientation, size, price, discount, originalPrice) {
+                this.$root.$emit('add-to-cart', poster, orientation, size, price, discount, originalPrice);
             }
         },
         created() {

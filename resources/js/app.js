@@ -5,12 +5,12 @@ window.Vue = require('vue').default;
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('products', require('./components/Products.vue').default);
 Vue.component('product', require('./components/Product.vue').default);
 Vue.component('InfiniteLoading', require('vue-infinite-loading'));
 Vue.component('product-display', require('./components/ProductDisplay.vue').default);
 Vue.component('product-filters', require('./components/ProductFilters.vue').default);
+Vue.component('shopping-cart', require('./components/ShoppingCart.vue').default);
 
 
 //Make sure to have an instance of Terminal running: npm run watch
@@ -37,19 +37,19 @@ const app = new Vue({
          * @param product (object)
          * @returns void
          */
-        addToCart(product) {
+        addToCart(product, orientation, size, price, discount, originalPrice) {
             // Check if localStorage key 'cart' is allready initialized
             // if not, then create localStorage entry and add first product
             // Finaly update the cart in the shopping-cart component
             if (window.localStorage.getItem('cart') === null) {
-                this.$refs.shoppingCart.cart = this.initCart(product);
+                this.$refs.shoppingCart.cart = this.initCart(product, orientation, size, price, discount, originalPrice);
                 window.localStorage.setItem('cart', JSON.stringify(this.$refs.shoppingCart.cart));
 
                 return;
             }
 
             // Update cart
-            this.updateCart(product);
+            this.updateCart(product, orientation, size, price, discount, originalPrice);
         },
 
         /**
@@ -58,12 +58,12 @@ const app = new Vue({
          * @param product (object)
          * @returns void
          */
-        initCart(product) {
+        initCart(product, orientation, size, price, discount, originalPrice) {
             return {
                 totalItems: 1,
-                totalPrice: parseFloat(product.price),
+                totalPrice: price,
                 items: [
-                    this.addNewProductToCart(product),
+                    this.addNewProductToCart(product, orientation, size, price, discount, originalPrice),
                 ]
             }
         },
@@ -73,7 +73,7 @@ const app = new Vue({
          * 
          * @param product (object)
          */
-        updateCart(product) {
+        updateCart(product, orientation, size, price, discount, originalPrice) {
             // Get and parse the cart from localStorage
             let cart = JSON.parse(window.localStorage.getItem('cart'));
             let itemIndex = false;
@@ -117,13 +117,15 @@ const app = new Vue({
          * @param product (object)
          * @return altered object
          */
-        addNewProductToCart(product) {
-            let price = parseFloat(product.price);
-
+        addNewProductToCart(product, orientation, size, price, discount, originalPrice) {
             return {
                 id: product.id,
                 name: product.name,
+                orientation: orientation,
+                size: size,
                 price: price,
+                discount: discount,
+                originalPrice: originalPrice,
                 amount: 1,
                 totalPrice: price
             }

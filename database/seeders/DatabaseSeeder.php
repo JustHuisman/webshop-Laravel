@@ -362,7 +362,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Order_StatusTableSeeder::class);
 
         $this->callWith(ProductTableSeeder::class,           ['products'          => $products]);
-        $this->callWith(Product_VariationTableSeeder::class, ['productvariations' => $products]);
+        $this->callWith(VariationTableSeeder::class,         ['variations'        => $products]);
         $this->callWith(Product_CategoryTableSeeder::class,  ['productcategories' => $products]);
         $this->call(Product_StatusTableSeeder::class);
 

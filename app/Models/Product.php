@@ -25,13 +25,6 @@ class Product extends Model
         'deleted_by',
     ];
 
-    protected $with = [
-        'productCategories',
-        'variations',
-        'size',
-        'order_details'
-    ];
-
     public function productCategories()
     {
         return $this->hasMany(Product_category::class);

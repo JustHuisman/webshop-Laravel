@@ -13,7 +13,7 @@ class ProductController extends Controller
 
     public function fetchProducts()
     {
-        $data = Product::with('variations', 'size')->orderBy('amount_sold', 'desc')->paginate(6);
+        $data = Product::with('variations','size', 'productCategories')->orderBy('amount_sold', 'desc')->paginate(6);
         return response()->json($data);
     }
 }

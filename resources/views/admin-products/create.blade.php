@@ -23,6 +23,8 @@
 
                 <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
                     @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                     <div class="container mt-5">
                         <div class="row mb-3">
                             <div class="col-md-4">

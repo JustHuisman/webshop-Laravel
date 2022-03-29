@@ -23,7 +23,7 @@ class VariationTableSeeder extends Seeder
                 for ($j = 1; $j < 4; $j++) {
                     Variation::create([
                         'product_id'     => $variation['id'],
-                        'stock'          => $variation['stock'],
+                        'stock'          => $variation['stock'] + rand(0, 20),
                         'orientation_id' => $i,
                         'size_id'        => $j
                         ]);

@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="app">
     <!-- WRAPPER CONTAINER WITH PRODUCT FILTERS AND PRODUCTS. -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <!-- PRODUCT FILTERS -->
-                <product-filters :filters="filters" ></product-filters>
+                <product-filters></product-filters>
                 <div>
                     <div class="form-check">
                         </label>
@@ -37,5 +36,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

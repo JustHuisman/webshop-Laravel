@@ -70,19 +70,6 @@
         created() {
             let self = this;
 
-            // Get all products calling function in controller (Ajax call)
-            axios({
-                method: 'GET',
-                url: 'home/products', //Didn't make the route yet!@!@!
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            }).then(function(response) {
-                self.products = response.data.products;
-            }).catch(function(response) {
-                
-            })
-
             this.$root.$on('update-filters', function(filters) {
                 this.filters = filters;
                 

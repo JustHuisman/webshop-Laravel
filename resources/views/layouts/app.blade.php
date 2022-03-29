@@ -88,15 +88,14 @@
                                 </div>
                             </li>
                         @endguest
-                        <li class="nav-item">
-                            <shopping-cart ref="shoppingCart"></shopping-cart>
-                        </li>
+                        <shopping-cart-icon></shopping-cart-icon>
                     </ul>
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
+            <shopping-cart ref="shoppingCart"></shopping-cart>
             @yield('content')
         </main>
     </div>

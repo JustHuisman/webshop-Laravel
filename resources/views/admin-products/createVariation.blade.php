@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Edit product') }}</div>
+                <div class="card-header">{{ __('Create new variation') }}</div>
 
                 <div>
                     <a href="/admin-products/{{$product->id}}"><button>Go back</button></a> <a href="/logout"><button>Log out</button></a>
@@ -18,41 +18,45 @@
                     </div>
                     @endif
 
-                    {{ __('Edit form:') }}
+                    {{ __('Create form for product:') }}
+                    {{$product->name}}
                 </div>
 
                 <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
                     @csrf
-                    @method('PUT')
-                    <div class="container mt-3">
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                         <div class="row mb-3">
                             <div class="col-md-4">
-                            <label for="name">Name</label><br>
-                                <input type="text" name="name" placeholder="Name" value="{{ isset($product) ? $product->name : '' }}">
+                            <label for="image">Image</label><br>
+                                <input type="file" name="image" placeholder="Image">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="file" name="image" placeholder="Image" value="{{ isset($product) ? $product->id . '.jpg' : '' }}">
-                                Current image: <img src="{{URL::asset('/images/posters/portrait/').'/'.$product->id.'.jpg'}}" alt="{{$product->name}}" height="50" width="50">
+                                <input type="number" name="stock" placeholder="Stock">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                            <label for="stock">Stock</label><br>
-                                <input type="number" name="stock" placeholder="Stock" value="{{ isset($product) ? $variation->stock : '' }}">
+                            <label for="orientation">Orientation</label><br>
+                                <select class="form-group" name="orientation_id">
+                                    <option value=1>Landscape</option>
+                                    <option value=2>Portrait</option>
+                                </select>
                             </div>
                         </div>
 
-
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="vat">Vat type</label><br>
-                                <input type="radio" name="vat_id" value="1" {{ ($product->vat_id=="1")? "checked" : "" }}>General rate</label>
-                                <input type="radio" name="vat_id" value="2" {{ ($product->vat_id=="2")? "checked" : "" }}>Low rate</label>
-                                <input type="radio" name="vat_id" value="3" {{ ($product->vat_id=="3")? "checked" : "" }}>Exemption</label>
+                            <label for="size">Size</label><br>
+                                <select class="form-group" name="size_id">
+                                    <option value=1>Large</option>
+                                    <option value=2>Medium</option>
+                                    <option value=3>Small</option>
+                                </select>
                             </div>
                         </div>
 

@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Admin Products') }}</div>
                 <div>
-                    <a href="/admin"><button>Go back</button></a> <a href="/admin-products/create"><button>Create new product</button></a>
+                    <a href="/admin"><button>Go back</button></a> <a href="/admin-products/create"><button style="width:150px;">Create new product</button></a>
                     <a href="/logout"><button>Log out</button></a>
                 </div>
 

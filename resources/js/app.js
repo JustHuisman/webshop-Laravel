@@ -11,6 +11,8 @@ Vue.component('InfiniteLoading', require('vue-infinite-loading'));
 Vue.component('product-display', require('./components/ProductDisplay.vue').default);
 Vue.component('product-filters', require('./components/ProductFilters.vue').default);
 Vue.component('shopping-cart', require('./components/ShoppingCart.vue').default);
+Vue.component('shopping-cart-icon', require('./components/ShoppingCartIcon.vue').default);
+
 
 
 //Make sure to have an instance of Terminal running: npm run watch
@@ -24,18 +26,17 @@ const app = new Vue({
 
     mounted() {
         // Add a 'listner'
-        this.$on('add-to-cart', (product) => {
-            this.addToCart(product)
+        this.$on('add-to-cart', (product, orientation, size, price, discount, originalPrice) => {
+            this.addToCart(product, orientation, size, price, discount, originalPrice)
         });
+
+        this.updateTotalsOnLoad();
     },
 
     methods: {
         /**
          * Adds a new product to the cart or changes the amount of an 
          *  existing product in the cart
-         * 
-         * @param product (object)
-         * @returns void
          */
         addToCart(product, orientation, size, price, discount, originalPrice) {
             // Check if localStorage key 'cart' is allready initialized
@@ -54,24 +55,22 @@ const app = new Vue({
 
         /**
          * Initialize a new shopping cart
-         * 
-         * @param product (object)
-         * @returns void
          */
         initCart(product, orientation, size, price, discount, originalPrice) {
             return {
                 totalItems: 1,
                 totalPrice: price,
+                totalDiscount: ((price / 100) * discount),
                 items: [
                     this.addNewProductToCart(product, orientation, size, price, discount, originalPrice),
                 ]
             }
         },
 
+
         /**
          * Update the entire shopping cart and calculate totals
          * 
-         * @param product (object)
          */
         updateCart(product, orientation, size, price, discount, originalPrice) {
             // Get and parse the cart from localStorage
@@ -80,7 +79,7 @@ const app = new Vue({
 
             // Check if the product to add to the cart allready exist in the cart
             cart.items.forEach(function(item, index) {
-                if (item.id === product.id) {
+                if (item.id === product.id && item.orientation === orientation && item.size === size) {
                     itemIndex = index; // Product found in cart
                 }
             });
@@ -91,9 +90,10 @@ const app = new Vue({
             if (itemIndex !== false) {
                 cart.items[itemIndex].amount++;
                 cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * cart.items[itemIndex].price;
+                cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((cart.items[itemIndex].price / 100) * cart.items[itemIndex].discount);
             } else {
                 // Product not found, so add it to the cart
-                cart.items.push(this.addNewProductToCart(product));
+                cart.items.push(this.addNewProductToCart(product, orientation, size, price, discount, originalPrice));
             }
 
             // Finaly update the 'super totals': total products in cart
@@ -103,6 +103,7 @@ const app = new Vue({
             // Update the cart
             cart.totalItems = totals.totalItems;
             cart.totalPrice = totals.totalPrice;
+            cart.totalDiscount = totals.totalDiscount;
 
             // Update the cart in the shopping-cart component
             this.$refs.shoppingCart.cart = cart;
@@ -139,15 +140,34 @@ const app = new Vue({
         updateTotals(cart) {
             let totalItems = 0;
             let totalPrice = 0;
+            let totalDiscount = 0;
 
             cart.items.forEach(item => {
                 totalItems += item.amount;
                 totalPrice += (item.amount * item.price);
+                totalDiscount += (item.amount * (item.price / 100) * item.discount);
             });
+
+            this.$root.$emit('update-total-items', totalItems);
 
             return {
                 totalItems: totalItems,
                 totalPrice: totalPrice,
+                totalDiscount: totalDiscount,
+            }
+        },
+
+        updateTotalsOnLoad(){
+            // Get and parse the cart from localStorage
+            let cart = JSON.parse(window.localStorage.getItem('cart'));
+            if (cart !== null) {
+                let totalItems = 0;
+
+                cart.items.forEach(item => {
+                    totalItems += item.amount;
+                });
+
+                this.$root.$emit('update-total-items', totalItems);
             }
         },
 

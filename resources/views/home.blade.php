@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="app">
     <!-- WRAPPER CONTAINER WITH PRODUCT FILTERS AND PRODUCTS. -->
     <div class="container">
         <div class="row justify-content-center">
@@ -37,5 +36,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

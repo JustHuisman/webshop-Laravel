@@ -60,7 +60,7 @@ const app = new Vue({
             return {
                 totalItems: 1,
                 totalPrice: price,
-                totalDiscount: ((price / 100) * discount),
+                totalDiscount: ((parseFloat(originalPrice) / 100) * discount),
                 items: [
                     this.addNewProductToCart(product, orientation, size, price, discount, originalPrice),
                 ]
@@ -89,8 +89,8 @@ const app = new Vue({
             //  and then update the ammount and totalPrice of this product
             if (itemIndex !== false) {
                 cart.items[itemIndex].amount++;
-                cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * cart.items[itemIndex].price;
-                cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((cart.items[itemIndex].price / 100) * cart.items[itemIndex].discount);
+                cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
             } else {
                 // Product not found, so add it to the cart
                 cart.items.push(this.addNewProductToCart(product, orientation, size, price, discount, originalPrice));
@@ -144,16 +144,16 @@ const app = new Vue({
 
             cart.items.forEach(item => {
                 totalItems += item.amount;
-                totalPrice += (item.amount * item.price);
-                totalDiscount += (item.amount * (item.price / 100) * item.discount);
+                totalPrice += (item.amount * parseFloat(item.price));
+                totalDiscount += (item.amount * (parseFloat(item.originalPrice) / 100) * item.discount);
             });
 
             this.$root.$emit('update-total-items', totalItems);
 
             return {
                 totalItems: totalItems,
-                totalPrice: totalPrice,
-                totalDiscount: totalDiscount,
+                totalPrice: totalPrice.toFixed(2),
+                totalDiscount: totalDiscount.toFixed(2),
             }
         },
 

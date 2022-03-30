@@ -30,12 +30,13 @@
                             {{ size }}
                         </button>
                     </div>
-                    <div class="price">Price:</div>
+                    <div v-if="price!==0" class="price">Price:</div>
                     <div v-show="originalPrice!== 0" class="price"
                         style="text-decoration: line-through; color: gray;">
                         &euro;{{ originalPrice }}</div>
-                    <div class="price">&euro;{{ this.price }}</div>
-                    <button v-on:click="addToCart(poster, orientations[selectedOrientation], sizes[selectedSize], price, discount, originalPrice)">Add to Cart
+                    <div v-if="price!==0" class="price">&euro;{{ this.price }}</div>
+                    <div v-else class="price">Out of stock</div>
+                    <button class="addToCart" v-on:click="addToCart(poster, orientations[selectedOrientation], sizes[selectedSize], price, discount, originalPrice)">Add to Cart
                     </button>
                 </div>
             </div>
@@ -62,7 +63,7 @@
                 orientationButtons: [],
                 sizeButtonsLandscape: [],
                 sizeButtonsPortrait: [],
-                productDiscount: 1,
+                addToCartButton: null,
             }
         },
         computed: {
@@ -124,15 +125,33 @@
                 this.setAvailableVariations();
                 this.updateOrientationButtons();
                 this.updateSizeButtons();
+                this.updateAddToCartButton();
                 
             },
             hideProduct: function() {
                 $('.product').fadeOut();
                 $('.productBackground').fadeOut();
             },
+            updateAddToCartButton: function() {
+                this.addToCartButton.disabled = false;
+                if(this.selectedOrientation == 0){
+                    if(this.sizeButtonsLandscape.length > 0){
+                        if(this.sizeButtonsLandscape[this.selectedSize].disabled == true){
+                            this.addToCartButton.disabled = true;
+                        }
+                    }
+                } else if(this.selectedOrientation == 1){
+                    if(this.sizeButtonsPortrait.length > 0){
+                        if(this.sizeButtonsPortrait[this.selectedSize].disabled == true){
+                            this.addToCartButton.disabled = true;
+                        }
+                    }
+                }
+            },
             updateOrientation: function(index) {
                 this.selectedOrientation = index;
                 this.updateOrientationButtons();
+                this.updateAddToCartButton();
             },
             //loop through orientation buttons and set the current to 'selected'
             updateOrientationButtons: function() {
@@ -144,6 +163,7 @@
             updateSize: function(index) {
                 this.selectedSize = index;
                 this.updateSizeButtons();
+                this.updateAddToCartButton();
             },
             //loop through size buttons and set the current to 'selected'
             updateSizeButtons: function() {
@@ -157,30 +177,32 @@
                 this.sizeButtonsPortrait[this.selectedSize].classList.add("selected");
             },
             setAvailableVariations: function(){
-                if('variations' in this.poster){
-                    self = this;
+                self = this;
+                if('variations' in self.poster){
+                    
                     self.availableOrientations = [];
-                    self.availableSizes = [];
+                    self.availableSizesLandscape = [];
+                    self.availableSizesPortrait = [];
                     self.poster.variations.forEach(function (variations) {
                         if(variations.orientation_id == 1){
                             self.availableOrientations.push("Landscape");
 
-                            if(variations.size_id == 1){
+                            if(variations.size_id == 1 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Large");
-                            } else if(variations.size_id == 2){
+                            } else if(variations.size_id == 2 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Medium");
-                            } else if(variations.size_id == 3){
+                            } else if(variations.size_id == 3 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Small"); 
                             }
                         }
-                        if(variations.orientation_id == 2){
+                        else if(variations.orientation_id == 2){
                             self.availableOrientations.push("Portrait");
 
-                            if(variations.size_id == 1){
+                            if(variations.size_id == 1 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Large");
-                            } else if(variations.size_id == 2){
+                            } else if(variations.size_id == 2 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Medium");
-                            } else if(variations.size_id == 3){
+                            } else if(variations.size_id == 3 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Small"); 
                             }
                         }
@@ -190,33 +212,39 @@
                     self.availableSizesLandscape = [...new Set(self.availableSizesLandscape)];
                     self.availableSizesPortrait = [...new Set(self.availableSizesPortrait)];
 
-                    
+                    //reset
+                    self.orientationButtons[0].disabled = false;
+                    self.orientationButtons[1].disabled = false;
+                    self.sizeButtonsLandscape[0].disabled = false;
+                    self.sizeButtonsLandscape[1].disabled = false;
+                    self.sizeButtonsLandscape[2].disabled = false;
+                    self.sizeButtonsPortrait[0].disabled = false;
+                    self.sizeButtonsPortrait[1].disabled = false;
+                    self.sizeButtonsPortrait[2].disabled = false;
+
                     if(!self.availableOrientations.includes("Landscape")){
-                        this.orientationButtons[0].disabled = true;
+                        self.orientationButtons[0].disabled = true;
                     }
                     if(!self.availableOrientations.includes("Portrait")){
-                        this.orientationButtons[1].disabled = true;
+                        self.orientationButtons[1].disabled = true;
                     }
-                    if(self.selectedOrientation == 0){
-                        if(!self.availableSizesLandscape.includes("Large")){
-                            this.sizeButtonsLandscape[0].disabled = true;
-                        }
-                        if(!self.availableSizesLandscape.includes("Medium")){
-                            this.sizeButtonsLandscape[1].disabled = true;
-                        }
-                        if(!self.availableSizesLandscape.includes("Small")){
-                            this.sizeButtonsLandscape[2].disabled = true;
-                        }
-                    } else if(self.selectedOrientation == 1){
-                        if(!self.availableSizesPortrait.includes("Large")){
-                            this.sizeButtonsPortrait[0].disabled = true;
-                        }
-                        if(!self.availableSizesPortrait.includes("Medium")){
-                            this.sizeButtonsPortrait[1].disabled = true;
-                        }
-                        if(!self.availableSizesPortrait.includes("Small")){
-                            this.sizeButtonsPortrait[2].disabled = true;
-                        }
+                    if(!self.availableSizesLandscape.includes("Large")){
+                        self.sizeButtonsLandscape[0].disabled = true;
+                    }
+                    if(!self.availableSizesLandscape.includes("Medium")){
+                        self.sizeButtonsLandscape[1].disabled = true;
+                    }
+                    if(!self.availableSizesLandscape.includes("Small")){
+                        self.sizeButtonsLandscape[2].disabled = true;
+                    }
+                    if(!self.availableSizesPortrait.includes("Large")){
+                        self.sizeButtonsPortrait[0].disabled = true;
+                    }
+                    if(!self.availableSizesPortrait.includes("Medium")){
+                        self.sizeButtonsPortrait[1].disabled = true;
+                    }
+                    if(!self.availableSizesPortrait.includes("Small")){
+                        self.sizeButtonsPortrait[2].disabled = true;
                     }
                 }
             },
@@ -244,6 +272,7 @@
                 this.orientationButtons = document.querySelectorAll(".orientationButton");
                 this.sizeButtonsLandscape = document.querySelectorAll(".sizeButtonLandscape");
                 this.sizeButtonsPortrait = document.querySelectorAll(".sizeButtonPortrait");
+                this.addToCartButton = document.querySelector(".addToCart");
             },
             //emit to the event bus (app.js) which item was added, the event bus is visible to all components
             addToCart: function(poster, orientation, size, price, discount, originalPrice) {

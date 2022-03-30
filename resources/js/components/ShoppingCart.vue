@@ -8,7 +8,7 @@
                 <div class="col-md-4">
                     <img :src="'/images/posters/' + (item.orientation).toLowerCase() + '/' + item.id + '.jpg'" width="100%">
                 </div>
-                <div class="col-md-3">{{ item.name + " " + item.orientation + " " + item.size }}</div>
+                <div class="col-md-3">{{ item.name }} <br> {{ item.orientation }} <br> {{ item.size }}</div>
                 <div class="col-md-1">{{ item.amount }}</div>
                 <div class="col-md-2">&euro;{{ item.price }}</div>
                 <div class="col-md-2">&euro;{{ item.totalPrice }}</div>

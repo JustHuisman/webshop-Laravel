@@ -11437,7 +11437,15 @@ button.sizeButtonPortrait.selected {
   background-color: #64afe4;
 }
 
-.disabledButton {
+button.sizeButtonLandscape:disabled {
+  background-color: #d8d8d8;
+}
+
+button.sizeButtonPortrait:disabled {
+  background-color: #d8d8d8;
+}
+
+button.addToCart:disabled {
   background-color: #d8d8d8;
 }
 

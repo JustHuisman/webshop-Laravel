@@ -5547,6 +5547,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('Product Display Component mounted.');
@@ -5564,7 +5565,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       orientationButtons: [],
       sizeButtonsLandscape: [],
       sizeButtonsPortrait: [],
-      productDiscount: 1
+      addToCartButton: null
     };
   },
   computed: {
@@ -5630,14 +5631,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.setAvailableVariations();
       this.updateOrientationButtons();
       this.updateSizeButtons();
+      this.updateAddToCartButton();
     },
     hideProduct: function hideProduct() {
       $('.product').fadeOut();
       $('.productBackground').fadeOut();
     },
+    updateAddToCartButton: function updateAddToCartButton() {
+      this.addToCartButton.disabled = false;
+
+      if (this.selectedOrientation == 0) {
+        if (this.sizeButtonsLandscape.length > 0) {
+          if (this.sizeButtonsLandscape[this.selectedSize].disabled == true) {
+            this.addToCartButton.disabled = true;
+          }
+        }
+      } else if (this.selectedOrientation == 1) {
+        if (this.sizeButtonsPortrait.length > 0) {
+          if (this.sizeButtonsPortrait[this.selectedSize].disabled == true) {
+            this.addToCartButton.disabled = true;
+          }
+        }
+      }
+    },
     updateOrientation: function updateOrientation(index) {
       this.selectedOrientation = index;
       this.updateOrientationButtons();
+      this.updateAddToCartButton();
     },
     //loop through orientation buttons and set the current to 'selected'
     updateOrientationButtons: function updateOrientationButtons() {
@@ -5650,6 +5670,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     updateSize: function updateSize(index) {
       this.selectedSize = index;
       this.updateSizeButtons();
+      this.updateAddToCartButton();
     },
     //loop through size buttons and set the current to 'selected'
     updateSizeButtons: function updateSizeButtons() {
@@ -5665,10 +5686,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.sizeButtonsPortrait[this.selectedSize].classList.add("selected");
     },
     setAvailableVariations: function setAvailableVariations() {
-      if ('variations' in this.poster) {
-        self = this;
+      self = this;
+
+      if ('variations' in self.poster) {
         self.availableOrientations = [];
-        self.availableSizes = [];
+        self.availableSizesLandscape = [];
+        self.availableSizesPortrait = [];
         self.poster.variations.forEach(function (variations) {
           if (variations.orientation_id == 1) {
             self.availableOrientations.push("Landscape");
@@ -5680,9 +5703,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             } else if (variations.size_id == 3) {
               self.availableSizesLandscape.push("Small");
             }
-          }
-
-          if (variations.orientation_id == 2) {
+          } else if (variations.orientation_id == 2) {
             self.availableOrientations.push("Portrait");
 
             if (variations.size_id == 1) {
@@ -5697,40 +5718,47 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         self.availableOrientations = _toConsumableArray(new Set(self.availableOrientations));
         self.availableSizesLandscape = _toConsumableArray(new Set(self.availableSizesLandscape));
-        self.availableSizesPortrait = _toConsumableArray(new Set(self.availableSizesPortrait));
+        self.availableSizesPortrait = _toConsumableArray(new Set(self.availableSizesPortrait)); //reset
+
+        self.orientationButtons[0].disabled = false;
+        self.orientationButtons[1].disabled = false;
+        self.sizeButtonsLandscape[0].disabled = false;
+        self.sizeButtonsLandscape[1].disabled = false;
+        self.sizeButtonsLandscape[2].disabled = false;
+        self.sizeButtonsPortrait[0].disabled = false;
+        self.sizeButtonsPortrait[1].disabled = false;
+        self.sizeButtonsPortrait[2].disabled = false;
 
         if (!self.availableOrientations.includes("Landscape")) {
-          this.orientationButtons[0].disabled = true;
+          self.orientationButtons[0].disabled = true;
         }
 
         if (!self.availableOrientations.includes("Portrait")) {
-          this.orientationButtons[1].disabled = true;
+          self.orientationButtons[1].disabled = true;
         }
 
-        if (self.selectedOrientation == 0) {
-          if (!self.availableSizesLandscape.includes("Large")) {
-            this.sizeButtonsLandscape[0].disabled = true;
-          }
+        if (!self.availableSizesLandscape.includes("Large")) {
+          self.sizeButtonsLandscape[0].disabled = true;
+        }
 
-          if (!self.availableSizesLandscape.includes("Medium")) {
-            this.sizeButtonsLandscape[1].disabled = true;
-          }
+        if (!self.availableSizesLandscape.includes("Medium")) {
+          self.sizeButtonsLandscape[1].disabled = true;
+        }
 
-          if (!self.availableSizesLandscape.includes("Small")) {
-            this.sizeButtonsLandscape[2].disabled = true;
-          }
-        } else if (self.selectedOrientation == 1) {
-          if (!self.availableSizesPortrait.includes("Large")) {
-            this.sizeButtonsPortrait[0].disabled = true;
-          }
+        if (!self.availableSizesLandscape.includes("Small")) {
+          self.sizeButtonsLandscape[2].disabled = true;
+        }
 
-          if (!self.availableSizesPortrait.includes("Medium")) {
-            this.sizeButtonsPortrait[1].disabled = true;
-          }
+        if (!self.availableSizesPortrait.includes("Large")) {
+          self.sizeButtonsPortrait[0].disabled = true;
+        }
 
-          if (!self.availableSizesPortrait.includes("Small")) {
-            this.sizeButtonsPortrait[2].disabled = true;
-          }
+        if (!self.availableSizesPortrait.includes("Medium")) {
+          self.sizeButtonsPortrait[1].disabled = true;
+        }
+
+        if (!self.availableSizesPortrait.includes("Small")) {
+          self.sizeButtonsPortrait[2].disabled = true;
         }
       }
     },
@@ -5761,6 +5789,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.orientationButtons = document.querySelectorAll(".orientationButton");
       this.sizeButtonsLandscape = document.querySelectorAll(".sizeButtonLandscape");
       this.sizeButtonsPortrait = document.querySelectorAll(".sizeButtonPortrait");
+      this.addToCartButton = document.querySelector(".addToCart");
     },
     //emit to the event bus (app.js) which item was added, the event bus is visible to all components
     addToCart: function addToCart(poster, orientation, size, price, discount, originalPrice) {
@@ -6237,7 +6266,7 @@ var app = new Vue({
       return {
         totalItems: 1,
         totalPrice: price,
-        totalDiscount: price / 100 * discount,
+        totalDiscount: parseFloat(originalPrice) / 100 * discount,
         items: [this.addNewProductToCart(product, orientation, size, price, discount, originalPrice)]
       };
     },
@@ -6261,8 +6290,8 @@ var app = new Vue({
 
       if (itemIndex !== false) {
         cart.items[itemIndex].amount++;
-        cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * cart.items[itemIndex].price;
-        cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (cart.items[itemIndex].price / 100 * cart.items[itemIndex].discount);
+        cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+        cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
       } else {
         // Product not found, so add it to the cart
         cart.items.push(this.addNewProductToCart(product, orientation, size, price, discount, originalPrice));
@@ -6312,14 +6341,14 @@ var app = new Vue({
       var totalDiscount = 0;
       cart.items.forEach(function (item) {
         totalItems += item.amount;
-        totalPrice += item.amount * item.price;
-        totalDiscount += item.amount * (item.price / 100) * item.discount;
+        totalPrice += item.amount * parseFloat(item.price);
+        totalDiscount += item.amount * (parseFloat(item.originalPrice) / 100) * item.discount;
       });
       this.$root.$emit('update-total-items', totalItems);
       return {
         totalItems: totalItems,
-        totalPrice: totalPrice,
-        totalDiscount: totalDiscount
+        totalPrice: totalPrice.toFixed(2),
+        totalDiscount: totalDiscount.toFixed(2)
       };
     },
     updateTotalsOnLoad: function updateTotalsOnLoad() {
@@ -40365,7 +40394,9 @@ var render = function () {
             2
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "price" }, [_vm._v("Price:")]),
+          _vm.price !== 0
+            ? _c("div", { staticClass: "price" }, [_vm._v("Price:")])
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "div",
@@ -40384,13 +40415,16 @@ var render = function () {
             [_vm._v("\n                    €" + _vm._s(_vm.originalPrice))]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "price" }, [
-            _vm._v("€" + _vm._s(this.price)),
-          ]),
+          _vm.price !== 0
+            ? _c("div", { staticClass: "price" }, [
+                _vm._v("€" + _vm._s(this.price)),
+              ])
+            : _c("div", { staticClass: "price" }, [_vm._v("Out of stock")]),
           _vm._v(" "),
           _c(
             "button",
             {
+              staticClass: "addToCart",
               on: {
                 click: function ($event) {
                   return _vm.addToCart(
@@ -41071,9 +41105,11 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-3" }, [
-              _vm._v(
-                _vm._s(item.name + " " + item.orientation + " " + item.size)
-              ),
+              _vm._v(_vm._s(item.name) + " "),
+              _c("br"),
+              _vm._v(" " + _vm._s(item.orientation) + " "),
+              _c("br"),
+              _vm._v(" " + _vm._s(item.size)),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-1" }, [

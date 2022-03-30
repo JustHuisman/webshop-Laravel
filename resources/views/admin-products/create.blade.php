@@ -28,7 +28,7 @@
                     <div class="container mt-5">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="text" name="name" placeholder="Name">
+                                <input type="text" name="name" required placeholder="Name">
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="text" name="stock" placeholder="Stock">
+                                <input type="text" name="stock" required placeholder="Stock">
                             </div>
                         </div>
 

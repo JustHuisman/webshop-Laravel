@@ -35,7 +35,7 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <input type="number" name="stock" placeholder="Stock">
+                                <input type="number" name="stock" required placeholder="Stock">
                             </div>
                         </div>
 

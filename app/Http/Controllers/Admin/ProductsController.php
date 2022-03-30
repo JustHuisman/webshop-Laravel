@@ -53,7 +53,7 @@ class ProductsController extends Controller
     public function store()
     {
         $product = $_POST;
-    
+ 
         Product::create([
             'name' => $product['name'],
             'vat_id' => $product['vat_id']

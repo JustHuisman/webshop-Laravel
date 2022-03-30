@@ -51,7 +51,6 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); //delete this line and put it to middleware later
 
 Route::get('/admin-products', [ProductsController::class, 'index'])->name('admin-products.index');
-
 Route::get('/admin-products/create', [ProductsController::class, 'create'])->name('admin-products.create');
 Route::post('/admin-products/store', [ProductsController::class, 'store'])->name('admin-products.store');
 Route::get('/admin-products/{id}', [ProductsController::class, 'variation'])->name('admin-products.variation');
@@ -63,8 +62,10 @@ Route::put('/admin-products/{id}/variations/{variation}/update', [ProductsContro
 Route::get('/admin-products/{id}/variations/{variation}/destroy', [ProductsController::class, 'destroyVariation'])->name('admin-products.destroy');
 Route::get('/admin-products/{id}/destroy', [ProductsController::class, 'destroy'])->name('admin-products.destroy');
 
-Route::resource('/admin-users', UsersController::class)->names('admin-users');
-Route::resource('/admin-returns', ReturnsController::class)->names('admin-returns');
+Route::resources([
+    'admin-users'   => UsersController::class,
+    'admin-returns' => ReturnsController::class
+]);
 
 
 

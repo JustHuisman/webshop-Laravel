@@ -98,7 +98,7 @@ const app = new Vue({
             //  and then update the ammount and totalPrice of this product
             if (itemIndex !== false) {
                 cart.items[itemIndex].amount++;
-                cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
                 cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
             } else {
                 // Product not found, so add it to the cart
@@ -124,7 +124,7 @@ const app = new Vue({
                 discount: discount,
                 originalPrice: originalPrice,
                 amount: 1,
-                totalPrice: price
+                totalPrice: price,
             }
         },
 
@@ -201,7 +201,7 @@ const app = new Vue({
                 //  and then update the amount and totalPrice of this product
                 if (itemIndex !== false) {
                     cart.items[itemIndex].amount--;
-                    cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                    cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
                     cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
 
                     if(cart.items[itemIndex].amount <= 0){
@@ -231,7 +231,7 @@ const app = new Vue({
                 //  and then update the amount and totalPrice of this product
                 if (itemIndex !== false) {
                     cart.items[itemIndex].amount++;
-                    cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                    cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
                     cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
                 }
                 

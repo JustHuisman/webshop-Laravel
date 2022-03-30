@@ -6305,7 +6305,7 @@ var app = new Vue({
 
       if (itemIndex !== false) {
         cart.items[itemIndex].amount++;
-        cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+        cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
         cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
       } else {
         // Product not found, so add it to the cart
@@ -6397,7 +6397,7 @@ var app = new Vue({
 
         if (itemIndex !== false) {
           cart.items[itemIndex].amount--;
-          cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+          cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
           cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
 
           if (cart.items[itemIndex].amount <= 0) {
@@ -6424,7 +6424,7 @@ var app = new Vue({
 
         if (itemIndex !== false) {
           cart.items[itemIndex].amount++;
-          cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+          cart.items[itemIndex].totalPrice = (cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price)).toFixed(2);
           cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
         }
       }

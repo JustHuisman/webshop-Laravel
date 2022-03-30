@@ -1,5 +1,6 @@
 require('./bootstrap');
 import $ from 'jquery'
+import _ from 'lodash';
 window.$ = window.jQuery = $;
 window.Vue = require('vue').default;
 import VueResource from 'vue-resource';
@@ -28,6 +29,14 @@ const app = new Vue({
         // Add a 'listner'
         this.$on('add-to-cart', (product, orientation, size, price, discount, originalPrice) => {
             this.addToCart(product, orientation, size, price, discount, originalPrice)
+        });
+
+        this.$on('remove-item', (item) => {
+            this.removeItemFromCart(item);
+        });
+
+        this.$on('add-item', (item) => {
+            this.addItemToCart(item);
         });
 
         this.updateTotalsOnLoad();
@@ -96,20 +105,7 @@ const app = new Vue({
                 cart.items.push(this.addNewProductToCart(product, orientation, size, price, discount, originalPrice));
             }
 
-            // Finaly update the 'super totals': total products in cart
-            //  and totalPrice of all the products in the cart
-            let totals = this.updateTotals(cart);
-
-            // Update the cart
-            cart.totalItems = totals.totalItems;
-            cart.totalPrice = totals.totalPrice;
-            cart.totalDiscount = totals.totalDiscount;
-
-            // Update the cart in the shopping-cart component
-            this.$refs.shoppingCart.cart = cart;
-
-            // And finaly update localStorage
-            window.localStorage.setItem('cart', JSON.stringify(cart));
+            this.updateAndStoreCart(cart);
         },
 
         /**
@@ -171,8 +167,76 @@ const app = new Vue({
             }
         },
 
-        removeItemFromCart(cart) {
+        updateAndStoreCart(cart){
+            // Finaly update the 'super totals': total products in cart
+            //  and totalPrice of all the products in the cart
+            let totals = this.updateTotals(cart);
 
+            // Update the cart
+            cart.totalItems = totals.totalItems;
+            cart.totalPrice = totals.totalPrice;
+            cart.totalDiscount = totals.totalDiscount;
+
+            // Update the cart in the shopping-cart component
+            this.$refs.shoppingCart.cart = cart;
+
+            // And finaly update localStorage
+            window.localStorage.setItem('cart', JSON.stringify(cart));
+        },
+
+        removeItemFromCart(item) {
+            let cart = JSON.parse(window.localStorage.getItem('cart'));
+            if (cart !== null) {
+                let itemIndex = false;
+
+                // Check if the product to remove in cart exist in the cart
+                cart.items.forEach(function(i, index) {
+                    if (item.id === i.id && item.orientation === i.orientation && item.size === i.size) {
+                        itemIndex = index; // Product found in cart
+                    }
+                });
+
+                // If product was found in the cart
+                //  itemIndex is the index in the array of the products in the cart
+                //  and then update the amount and totalPrice of this product
+                if (itemIndex !== false) {
+                    cart.items[itemIndex].amount--;
+                    cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                    cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
+
+                    if(cart.items[itemIndex].amount <= 0){
+                        cart.items.splice(itemIndex, 1);
+                    }
+                }
+                
+            }
+            this.updateAndStoreCart(cart);
+
+        },
+
+        addItemToCart(item){
+            let cart = JSON.parse(window.localStorage.getItem('cart'));
+            if (cart !== null) {
+                let itemIndex = false;
+
+                // Check if the product to add to the cart already exist in the cart
+                cart.items.forEach(function(i, index) {
+                    if (item.id === i.id && item.orientation === i.orientation && item.size === i.size) {
+                        itemIndex = index; // Product found in cart
+                    }
+                });
+
+                // If product was found in the cart
+                //  itemIndex is the index in the array of the products in the cart
+                //  and then update the amount and totalPrice of this product
+                if (itemIndex !== false) {
+                    cart.items[itemIndex].amount++;
+                    cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+                    cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * ((parseFloat(cart.items[itemIndex].originalPrice) / 100) * cart.items[itemIndex].discount);
+                }
+                
+            }
+            this.updateAndStoreCart(cart);
         },
 
         closeShoppingCart() {

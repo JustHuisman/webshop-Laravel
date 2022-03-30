@@ -6150,6 +6150,12 @@ __webpack_require__.r(__webpack_exports__);
     showCart: function showCart() {
       $('.cartBackground').fadeIn();
       $('.cart').fadeIn({});
+    },
+    removeItem: function removeItem(item) {
+      this.$root.$emit('remove-item', item);
+    },
+    addItem: function addItem(item) {
+      this.$root.$emit('add-item', item);
     }
   },
   created: function created() {
@@ -6209,14 +6215,17 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_resource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-resource */ "./node_modules/vue-resource/dist/vue-resource.esm.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_resource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-resource */ "./node_modules/vue-resource/dist/vue-resource.esm.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 window.$ = window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_0___default());
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 
-Vue.use(vue_resource__WEBPACK_IMPORTED_MODULE_1__["default"]);
+Vue.use(vue_resource__WEBPACK_IMPORTED_MODULE_2__["default"]);
 Vue.component('products', (__webpack_require__(/*! ./components/Products.vue */ "./resources/js/components/Products.vue")["default"]));
 Vue.component('product', (__webpack_require__(/*! ./components/Product.vue */ "./resources/js/components/Product.vue")["default"]));
 Vue.component('InfiniteLoading', __webpack_require__(/*! vue-infinite-loading */ "./node_modules/vue-infinite-loading/dist/vue-infinite-loading.js"));
@@ -6237,6 +6246,12 @@ var app = new Vue({
     // Add a 'listner'
     this.$on('add-to-cart', function (product, orientation, size, price, discount, originalPrice) {
       _this.addToCart(product, orientation, size, price, discount, originalPrice);
+    });
+    this.$on('remove-item', function (item) {
+      _this.removeItemFromCart(item);
+    });
+    this.$on('add-item', function (item) {
+      _this.addItemToCart(item);
     });
     this.updateTotalsOnLoad();
   },
@@ -6295,19 +6310,9 @@ var app = new Vue({
       } else {
         // Product not found, so add it to the cart
         cart.items.push(this.addNewProductToCart(product, orientation, size, price, discount, originalPrice));
-      } // Finaly update the 'super totals': total products in cart
-      //  and totalPrice of all the products in the cart
+      }
 
-
-      var totals = this.updateTotals(cart); // Update the cart
-
-      cart.totalItems = totals.totalItems;
-      cart.totalPrice = totals.totalPrice;
-      cart.totalDiscount = totals.totalDiscount; // Update the cart in the shopping-cart component
-
-      this.$refs.shoppingCart.cart = cart; // And finaly update localStorage
-
-      window.localStorage.setItem('cart', JSON.stringify(cart));
+      this.updateAndStoreCart(cart);
     },
 
     /**
@@ -6363,7 +6368,69 @@ var app = new Vue({
         this.$root.$emit('update-total-items', totalItems);
       }
     },
-    removeItemFromCart: function removeItemFromCart(cart) {},
+    updateAndStoreCart: function updateAndStoreCart(cart) {
+      // Finaly update the 'super totals': total products in cart
+      //  and totalPrice of all the products in the cart
+      var totals = this.updateTotals(cart); // Update the cart
+
+      cart.totalItems = totals.totalItems;
+      cart.totalPrice = totals.totalPrice;
+      cart.totalDiscount = totals.totalDiscount; // Update the cart in the shopping-cart component
+
+      this.$refs.shoppingCart.cart = cart; // And finaly update localStorage
+
+      window.localStorage.setItem('cart', JSON.stringify(cart));
+    },
+    removeItemFromCart: function removeItemFromCart(item) {
+      var cart = JSON.parse(window.localStorage.getItem('cart'));
+
+      if (cart !== null) {
+        var itemIndex = false; // Check if the product to remove in cart exist in the cart
+
+        cart.items.forEach(function (i, index) {
+          if (item.id === i.id && item.orientation === i.orientation && item.size === i.size) {
+            itemIndex = index; // Product found in cart
+          }
+        }); // If product was found in the cart
+        //  itemIndex is the index in the array of the products in the cart
+        //  and then update the amount and totalPrice of this product
+
+        if (itemIndex !== false) {
+          cart.items[itemIndex].amount--;
+          cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+          cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
+
+          if (cart.items[itemIndex].amount <= 0) {
+            cart.items.splice(itemIndex, 1);
+          }
+        }
+      }
+
+      this.updateAndStoreCart(cart);
+    },
+    addItemToCart: function addItemToCart(item) {
+      var cart = JSON.parse(window.localStorage.getItem('cart'));
+
+      if (cart !== null) {
+        var itemIndex = false; // Check if the product to add to the cart already exist in the cart
+
+        cart.items.forEach(function (i, index) {
+          if (item.id === i.id && item.orientation === i.orientation && item.size === i.size) {
+            itemIndex = index; // Product found in cart
+          }
+        }); // If product was found in the cart
+        //  itemIndex is the index in the array of the products in the cart
+        //  and then update the amount and totalPrice of this product
+
+        if (itemIndex !== false) {
+          cart.items[itemIndex].amount++;
+          cart.items[itemIndex].totalPrice = cart.items[itemIndex].amount * parseFloat(cart.items[itemIndex].price);
+          cart.items[itemIndex].totalDiscount = cart.items[itemIndex].amount * (parseFloat(cart.items[itemIndex].originalPrice) / 100 * cart.items[itemIndex].discount);
+        }
+      }
+
+      this.updateAndStoreCart(cart);
+    },
     closeShoppingCart: function closeShoppingCart() {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.layer').fadeOut();
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.cart').fadeOut();
@@ -41090,7 +41157,7 @@ var render = function () {
         _vm._v(" "),
         _vm._l(_vm.cart.items, function (item, index) {
           return _c("div", { key: index, staticClass: "row mb-3" }, [
-            _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "col-md-3" }, [
               _c("img", {
                 attrs: {
                   src:
@@ -41112,8 +41179,32 @@ var render = function () {
               _vm._v(" " + _vm._s(item.size)),
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-1" }, [
+            _c("div", { staticClass: "col-md-2" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "smallButton",
+                  on: {
+                    click: function ($event) {
+                      return _vm.removeItem(item)
+                    },
+                  },
+                },
+                [_vm._v("-")]
+              ),
               _vm._v(_vm._s(item.amount)),
+              _c(
+                "button",
+                {
+                  staticClass: "smallButton",
+                  on: {
+                    click: function ($event) {
+                      return _vm.addItem(item)
+                    },
+                  },
+                },
+                [_vm._v("+")]
+              ),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-2" }, [

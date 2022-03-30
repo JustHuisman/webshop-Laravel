@@ -5,11 +5,11 @@
                 <p>&#10005;</p>
             </div>
             <div class="row mb-3" v-for="(item, index) in cart.items" :key="index">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <img :src="'/images/posters/' + (item.orientation).toLowerCase() + '/' + item.id + '.jpg'" width="100%">
                 </div>
                 <div class="col-md-3">{{ item.name }} <br> {{ item.orientation }} <br> {{ item.size }}</div>
-                <div class="col-md-1">{{ item.amount }}</div>
+                <div class="col-md-2"><button class="smallButton" @click='removeItem(item)'>-</button>{{ item.amount }}<button class="smallButton" @click='addItem(item)'>+</button></div>
                 <div class="col-md-2">&euro;{{ item.price }}</div>
                 <div class="col-md-2">&euro;{{ item.totalPrice }}</div>
             </div>
@@ -49,6 +49,14 @@
                 $('.cartBackground').fadeIn();
                 $('.cart').fadeIn({
                 });
+            },
+
+            removeItem(item){
+                this.$root.$emit('remove-item', item);
+            },
+
+            addItem(item){
+                this.$root.$emit('add-item', item);
             },
         },
         created() {

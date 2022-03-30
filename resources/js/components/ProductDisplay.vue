@@ -187,22 +187,22 @@
                         if(variations.orientation_id == 1){
                             self.availableOrientations.push("Landscape");
 
-                            if(variations.size_id == 1){
+                            if(variations.size_id == 1 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Large");
-                            } else if(variations.size_id == 2){
+                            } else if(variations.size_id == 2 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Medium");
-                            } else if(variations.size_id == 3){
+                            } else if(variations.size_id == 3 && variations.stock > 0){
                                 self.availableSizesLandscape.push("Small"); 
                             }
                         }
                         else if(variations.orientation_id == 2){
                             self.availableOrientations.push("Portrait");
 
-                            if(variations.size_id == 1){
+                            if(variations.size_id == 1 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Large");
-                            } else if(variations.size_id == 2){
+                            } else if(variations.size_id == 2 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Medium");
-                            } else if(variations.size_id == 3){
+                            } else if(variations.size_id == 3 && variations.stock > 0){
                                 self.availableSizesPortrait.push("Small"); 
                             }
                         }

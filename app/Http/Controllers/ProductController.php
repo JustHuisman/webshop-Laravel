@@ -15,7 +15,5 @@ class ProductController extends Controller
     {
         $data = Product::with('variations','size', 'productCategories')->orderBy('amount_sold', 'desc')->paginate(6);
         return response()->json($data);
-
-        
     }
 }

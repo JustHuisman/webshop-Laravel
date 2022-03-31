@@ -5373,6 +5373,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('Product Component mounted.');
@@ -40288,24 +40294,36 @@ var render = function () {
           expression: "isVisible",
         },
       ],
-      staticClass: "card",
-      on: {
-        click: function ($event) {
-          return _vm.showProduct(_vm.product)
-        },
-      },
+      staticClass: "posterContainer p-3 m-0",
     },
     [
-      _c("img", {
-        staticClass: "card-img-top",
-        attrs: { src: _vm.image, alt: "..." },
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("h5", { staticClass: "card-title" }, [
-          _vm._v(_vm._s(_vm.product.name)),
-        ]),
-      ]),
+      _c(
+        "div",
+        {
+          staticClass: "posterInnerContainer p-0 m-0",
+          on: {
+            click: function ($event) {
+              return _vm.showProduct(_vm.product)
+            },
+          },
+        },
+        [
+          _c("div", { staticClass: "posterImg rounded-50 shadow" }, [
+            _c("img", {
+              staticClass: "posterImg img-fluid rounded-50",
+              attrs: { src: _vm.image, alt: "" },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "overlayBackground rounded-bottom" }, [
+            _c("div", { staticClass: "overlayText" }, [
+              _c("p", { staticClass: "browseItemName" }, [
+                _vm._v(_vm._s(_vm.product.name)),
+              ]),
+            ]),
+          ]),
+        ]
+      ),
     ]
   )
 }
@@ -40546,11 +40564,13 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
+      _c("div", { staticClass: "col-md-8 productFilters" }, [
         _c(
           "form",
           [
-            _c("p", [_vm._v("Orientation")]),
+            _c("p", { staticClass: "productFiltersTitle" }, [
+              _vm._v("Orientation"),
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
               _c("input", {
@@ -40680,7 +40700,9 @@ var render = function () {
               ),
             ]),
             _vm._v(" "),
-            _c("p", [_vm._v("Size")]),
+            _c("hr"),
+            _vm._v(" "),
+            _c("p", { staticClass: "productFiltersTitle" }, [_vm._v("Size")]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
               _c("input", {
@@ -40856,7 +40878,9 @@ var render = function () {
               ),
             ]),
             _vm._v(" "),
-            _c("p", [_vm._v("Price")]),
+            _c("hr"),
+            _vm._v(" "),
+            _c("p", { staticClass: "productFiltersTitle" }, [_vm._v("Price")]),
             _vm._v(" "),
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("span", { staticClass: "input-group-text" }, [_vm._v("Min:")]),
@@ -40985,7 +41009,11 @@ var render = function () {
               ),
             ]),
             _vm._v(" "),
-            _c("p", [_vm._v("Category")]),
+            _c("hr"),
+            _vm._v(" "),
+            _c("p", { staticClass: "productFiltersTitle" }, [
+              _vm._v("Category"),
+            ]),
             _vm._v(" "),
             _vm._l(_vm.categories, function (category) {
               return _c("div", { key: category.id }, [

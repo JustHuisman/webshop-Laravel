@@ -1,6 +1,9 @@
 <template>
     <div>
-        <img class="navCartImg" src="/images/icons/cart.svg" @click="showCart()" width="32" height="32">
+        <div class="image-wrapper">
+            <img class="navCartImg navbar-img" src="/images/icons/cart.svg" @click="showCart()" width="32" height="32">
+            <img class="navCartImg navbar-img Hover" src="/images/icons/cart-filled.svg" @click="showCart()" width="32" height="32">
+        </div>
         <span class="cartAmount badge bg-primary" v-if="(cartAmount>0)">{{cartAmount}}</span>
     </div>
 </template>

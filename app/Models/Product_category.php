@@ -17,6 +17,11 @@ class Product_category extends Model
     ];
 
     protected $casts = [
-        'category_id' => 'array',
+        'category_id' => 'integer',
     ];
+
+    public function product()
+    {
+    return $this->belongsTo(Product::class);    
+    }
 }

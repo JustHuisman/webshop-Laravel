@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Product_category;
 use App\Models\Variation;
+use App\Models\Category;
 
 class ProductsController extends Controller
 {
@@ -53,7 +55,7 @@ class ProductsController extends Controller
     public function store()
     {
         $product = $_POST;
- 
+        
         Product::create([
             'name' => $product['name'],
             'vat_id' => $product['vat_id']
@@ -65,6 +67,15 @@ class ProductsController extends Controller
             'size_id'        => $product['size_id'],
             'stock'          => $product['stock']
         ]);
+        
+        $categories = $product['category_id'];
+        
+        foreach ($categories as $category) {
+            Product_category::create([
+                'product_id'  => $product['product_id'] + 1,
+                'category_id' => $category
+            ]);
+        }
 
         return redirect()->route('admin-products.index')->with('success',
         'Product created successfully.');
@@ -86,7 +97,7 @@ class ProductsController extends Controller
         //     $input['image'] = "$productImage";
         // }
         // Variation::create($input);
-        
+
         Variation::create([
             'product_id'     => $variation['product_id'],
             'orientation_id' => $variation['orientation_id'],
@@ -128,10 +139,12 @@ class ProductsController extends Controller
         $product = Product::find($productId);
         $variation = Variation::find($variationId);
 
-        return view('admin-products.edit', [
+        $productCategories = $product->productCategories->pluck('category_id')->toArray();
+        $categories = Category::all();
+
+        return view('admin-products.edit',
+        compact('product', 'variation', 'categories', 'productCategories'), [
             'method'  => 'POST',
-            'product' => $product,
-            'variation' => $variation,
             'action'  => '/admin-products/' . $productId .
              '/variations/' . $variationId . '/update'   
         ]);
@@ -140,10 +153,15 @@ class ProductsController extends Controller
     public function update($productId, $variationId)
     {   
         $data = $_POST;
-
+        
         $product = Product::find($productId);
         $variation = Variation::find($variationId);
- 
+
+        $categorymodel = Product_category::find($productId);
+        $categories = $data['category_id'];
+        $categorymodel->update($categories);
+        
+        
         $product->update($data);
         $variation->update($data);
 

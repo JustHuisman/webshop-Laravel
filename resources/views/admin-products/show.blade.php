@@ -22,7 +22,8 @@
                 </div>
                 <ul>
                    <li> Name: {{ $product->name }} </li>
-                   <li> <img src="{{URL::asset('/images/posters/portrait/').'/'.$product->id.'.jpg'}}" alt="{{$product->name}}" height="200" width="200"> </li>
+                   <li> <img src="{{URL::asset('/images/posters/'.$orientation.'/').'/'.$product->id.'.jpg'}}"
+                   alt="{{$product->name}}" height="200" width="200"> </li>
                    <li> Stock: {{ $variation->stock }} </li>
                 </ul>
             </div>

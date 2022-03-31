@@ -8,21 +8,14 @@
                 <div class="card-header">{{ __('Admin') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('Choose a subject:') }}
-                </div>
-                <ul>
-                    <li> <a href="/admin-products">Products</a> </li>
-                    <li> <a href="/admin-users">Users</a> </li>
-                    <li> <a href="/admin-returns">Returns</a> </li>
+                    <ul>
+                        <li> <a href="/admin-products">Products</a> </li>
+                        <li> <a href="/admin-users">Users</a> </li>
+                        <li> <a href="/admin-returns">Returns</a> </li>
                     </ul>
                     <br>
                     <a href="/logout">Log out</a>
+                </div>
             </div>
         </div>
     </div>

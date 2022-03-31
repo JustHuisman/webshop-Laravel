@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 productFilters">
                 <form>
-                    <p>Orientation</p>
+                    <p class="productFiltersTitle">Orientation</p>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="filterLandscape" v-model="filters.orientationLandscape" checked>
                         <label class="form-check-label" for="flexCheckDefault">
@@ -16,8 +16,8 @@
                         Portrait
                         </label>
                     </div>
-
-                    <p>Size</p>
+                    <hr>
+                    <p class="productFiltersTitle">Size</p>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="filterLarge" v-model="filters.sizeLarge" checked>
                         <label class="form-check-label" for="flexCheckDefault">
@@ -36,8 +36,8 @@
                         Small
                         </label>
                     </div>
-
-                    <p>Price</p>
+                    <hr>
+                    <p class="productFiltersTitle">Price</p>
                     <div class="input-group mb-3">
                         <span class="input-group-text">Min:</span>
                         <input type="text" class="form-control" aria-label="Minimum price" value=0 id="filterMinPrice" v-model="filters.priceLow">
@@ -54,8 +54,8 @@
                         Discount only
                         </label>
                     </div>
-                    
-                    <p>Category</p>
+                    <hr>
+                    <p class="productFiltersTitle">Category</p>
                     <div v-for="category in categories" v-bind:key="category.id">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" :value="category.id" 

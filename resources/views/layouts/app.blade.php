@@ -88,7 +88,9 @@
                                 </div>
                             </li>
                         @endguest
-                        <shopping-cart-icon></shopping-cart-icon>
+                        <li class="nav-item">
+                            <shopping-cart-icon></shopping-cart-icon>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -99,7 +101,7 @@
             @yield('content')
         </main>
     </div>
-    <footer class="footer mt-auto py-3 bg-dark">
+    <footer class="footer mt-auto py-3 bg-dark fixed-bottom">
         <div class="container d-flex justify-content-center">
             <p>Dave & Just 2022&copy;<br>
                 <a class="footer-link" href="{{ url('/return') }}">Returns</a>    

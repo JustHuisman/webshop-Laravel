@@ -1,8 +1,14 @@
 <template>
-    <div v-show="isVisible" class="card" @click="showProduct(product) ">
-        <img :src="image" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
+    <div v-show="isVisible" class="posterContainer p-3 m-0">
+        <div class="posterInnerContainer p-0 m-0" @click="showProduct(product)">
+            <div class="posterImg rounded-50 shadow">
+                <img :src="image" class="posterImg img-fluid rounded-50" alt="">
+            </div>
+            <div class="overlayBackground rounded-bottom">
+                <div class="overlayText">
+                    <p class="browseItemName">{{product.name}}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>

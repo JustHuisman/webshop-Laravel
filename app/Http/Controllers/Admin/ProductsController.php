@@ -50,22 +50,10 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $product = $_POST;
-        $input = $request->all();
-         
-        if ($image = $request->file('image')) {
-            if ($input['orientation_id'] == 1) {
-                $destinationPath = 'images/posters/landscape';
-            } else {
-                $destinationPath = 'images/posters/portrait';
-            }
-            $productImage = $product['product_id'] . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $productImage);
-            $input['image'] = "$productImage";
-        } 
-        
+ 
         Product::create([
             'name' => $product['name'],
             'vat_id' => $product['vat_id']
@@ -82,34 +70,31 @@ class ProductsController extends Controller
         'Product created successfully.');
     }
 
-    public function storeVariation(Request $request)
+    public function storeVariation()
     {
         $variation = $_POST;
-        $input = $request->all();
-         
-        if ($image = $request->file('image')) {
-            if ($input['orientation_id'] == 1) {
-                $destinationPath = 'images/posters/landscape';
-            } else {
-                $destinationPath = 'images/posters/portrait';
-            }
-            $productImage = $variation['product_id'] . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $productImage);
-            $input['image'] = "$productImage";
-        } 
-     
-        Variation::create($input); 
 
-        // $variation = $_POST;
+        // $input = $request->all();
+        // if ($image = $request->file('image')) {
+        //     if ($input['orientation_id'] == 1) {
+        //         $destinationPath = 'images/posters/landscape';
+        //     } else {
+        //         $destinationPath = 'images/posters/portrait';
+        //     }
+        //     $productImage = $variation['product_id'] . "." . $image->getClientOriginalExtension();
+        //     $image->move($destinationPath, $productImage);
+        //     $input['image'] = "$productImage";
+        // }
+        // Variation::create($input);
+        
+        Variation::create([
+            'product_id'     => $variation['product_id'],
+            'orientation_id' => $variation['orientation_id'],
+            'size_id'        => $variation['size_id'],
+            'stock'          => $variation['stock']
+        ]);
 
-        // Variation::create([
-        //     'product_id'     => $variation['product_id'],
-        //     'orientation_id' => $variation['orientation_id'],
-        //     'size_id'        => $variation['size_id'],
-        //     'stock'          => $variation['stock']
-        // ]);
-
-        return redirect()->route('admin-products.variation', $input['product_id'])->with('success',
+        return redirect()->route('admin-products.variation', $variation['product_id'])->with('success',
         'Variation created successfully.');
     }
 
@@ -132,9 +117,9 @@ class ProductsController extends Controller
         $orientation = (strtolower($variation->orientation->name));
         
         return view('admin-products.show', [
-            'product'     => $product,
-            'variation'   => $variation,
-            'orientation' => $orientation,
+            'product' => $product,
+            'variation' => $variation,
+            'orientation' => $orientation
         ]);
     }
 

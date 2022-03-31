@@ -51,39 +51,57 @@
                         @guest
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img class="navbar-img" src="images/icons/person-circle.svg" alt="User" width="32" height="32">User
+                                    <div class="image-wrapper">
+                                        <img class="navbar-img" src="images/icons/person-circle.svg" alt="User" width="32" height="32">
+                                        <img class="navbar-img Hover" src="images/icons/person-circle-filled.svg" alt="User" width="32" height="32">User
+                                    </div>    
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-dark" aria-labelledby="navbarDropdown">
                                 @if (Route::has('login'))
                                     <a class="dropdown-item" href="{{ route('login') }}">
-                                        <img class="navbar-img" src="images/icons/person.svg" alt="Logout" width="32" height="32">{{ __('Login') }}</a>
+                                        <div class="image-wrapper">
+                                            <img class="navbar-img" src="images/icons/person.svg" alt="Logout" width="32" height="32">
+                                            <img class="navbar-img Hover" src="images/icons/person-filled.svg" alt="Logout" width="32" height="32">{{ __('Login') }}
+                                        </div>
+                                    </a>
                                 @endif
 
                                 @if (Route::has('register'))
                                     <a class="dropdown-item" href="{{ route('register') }}">
-                                        <img class="navbar-img" src="images/icons/person-plus.svg" alt="Logout" width="32" height="32">{{ __('Register') }}</a>
+                                        <div class="image-wrapper">
+                                            <img class="navbar-img" src="images/icons/person-plus.svg" alt="Logout" width="32" height="32">
+                                            <img class="navbar-img Hover" src="images/icons/person-plus-filled.svg" alt="Logout" width="32" height="32">{{ __('Register') }}
+                                        </div>
+                                    </a>
                                 @endif
                                 </div>
                             </li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img class="navbar-img" src="images/icons/person-circle.svg" alt="User" width="32" height="32">{{ Auth::user()->first_name }}
+                                    <div class="image-wrapper">
+                                        <img class="navbar-img" src="images/icons/person-circle.svg" alt="User" width="32" height="32">
+                                        <img class="navbar-img Hover" src="images/icons/person-circle-filled.svg" alt="User" width="32" height="32">{{ Auth::user()->first_name }}
+                                    </div>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-dark" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        <img class="navbar-img" src="images/icons/person-x.svg" alt="Logout" width="32" height="32">{{ __('Logout') }}
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <div class="image-wrapper">
+                                            <img class="navbar-img" src="images/icons/person-x.svg" alt="Logout" width="32" height="32">
+                                            <img class="navbar-img Hover" src="images/icons/person-x-filled.svg" alt="Logout" width="32" height="32">{{ __('Logout') }}
+                                        </div>
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
-                                    <a class="dropdown-item">
-                                        <a class="dropdown-item" href="{{ url('/admin') }}"><img class="navbar-img" src="images/icons/person-admin.svg" alt="Admin" width="32" height="32">Admin</a>
+                                    <a class="dropdown-item" href="{{ url('/admin') }}">
+                                        <div class="image-wrapper">
+                                            <img class="navbar-img" src="images/icons/person-admin.svg" alt="Admin" width="32" height="32">
+                                            <img class="navbar-img Hover" src="images/icons/person-admin.svg" alt="Admin" width="32" height="32">Admin
+                                        </div>
                                     </a>
                                 </div>
                             </li>

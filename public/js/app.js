@@ -6191,6 +6191,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -41314,15 +41317,31 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("img", {
-      staticClass: "navCartImg",
-      attrs: { src: "/images/icons/cart.svg", width: "32", height: "32" },
-      on: {
-        click: function ($event) {
-          return _vm.showCart()
+    _c("div", { staticClass: "image-wrapper" }, [
+      _c("img", {
+        staticClass: "navCartImg navbar-img",
+        attrs: { src: "/images/icons/cart.svg", width: "32", height: "32" },
+        on: {
+          click: function ($event) {
+            return _vm.showCart()
+          },
         },
-      },
-    }),
+      }),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "navCartImg navbar-img Hover",
+        attrs: {
+          src: "/images/icons/cart-filled.svg",
+          width: "32",
+          height: "32",
+        },
+        on: {
+          click: function ($event) {
+            return _vm.showCart()
+          },
+        },
+      }),
+    ]),
     _vm._v(" "),
     _vm.cartAmount > 0
       ? _c("span", { staticClass: "cartAmount badge bg-primary" }, [

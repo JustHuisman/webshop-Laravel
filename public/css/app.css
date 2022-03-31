@@ -11320,6 +11320,23 @@ li.nav-item.navbar-link.active {
   font-size: 0.75em;
 }
 
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-img.Hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.navbar-img.Hover:hover {
+  opacity: 1;
+}
+
 footer {
   color: gray;
   text-align: center;

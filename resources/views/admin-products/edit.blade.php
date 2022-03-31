@@ -42,7 +42,7 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                             <label for="stock">Stock</label><br>
-                                <input type="number" name="stock" required placeholder="Stock" value="{{ isset($product) ? $variation->stock : '' }}">
+                                <input type="number" name="stock" required min="0" placeholder="Stock" value="{{ isset($product) ? $variation->stock : '' }}">
                             </div>
                         </div>
 

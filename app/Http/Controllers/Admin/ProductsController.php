@@ -74,6 +74,19 @@ class ProductsController extends Controller
     {
         $variation = $_POST;
 
+        // $input = $request->all();
+        // if ($image = $request->file('image')) {
+        //     if ($input['orientation_id'] == 1) {
+        //         $destinationPath = 'images/posters/landscape';
+        //     } else {
+        //         $destinationPath = 'images/posters/portrait';
+        //     }
+        //     $productImage = $variation['product_id'] . "." . $image->getClientOriginalExtension();
+        //     $image->move($destinationPath, $productImage);
+        //     $input['image'] = "$productImage";
+        // }
+        // Variation::create($input);
+        
         Variation::create([
             'product_id'     => $variation['product_id'],
             'orientation_id' => $variation['orientation_id'],
@@ -101,10 +114,12 @@ class ProductsController extends Controller
     {
         $product = Product::find($productId);
         $variation = Variation::find($variationId);
+        $orientation = (strtolower($variation->orientation->name));
         
         return view('admin-products.show', [
             'product' => $product,
             'variation' => $variation,
+            'orientation' => $orientation
         ]);
     }
 

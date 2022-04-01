@@ -27,7 +27,7 @@
                     <div class="container mt-3">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                            <label for="name">Name</label><br>
+                                <label for="name">Name</label><br>
                                 <input type="text" name="name" required placeholder="Name" value="{{ isset($product) ? $product->name : '' }}">
                             </div>
                         </div>
@@ -41,11 +41,10 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4">
-                            <label for="stock">Stock</label><br>
+                                <label for="stock">Stock</label><br>
                                 <input type="number" name="stock" required min="0" placeholder="Stock" value="{{ isset($product) ? $variation->stock : '' }}">
                             </div>
                         </div>
-
 
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -55,6 +54,14 @@
                                 <input type="radio" name="vat_id" value="3" {{ ($product->vat_id=="3")? "checked" : "" }}>Exemption</label>
                             </div>
                         </div>
+
+                        Categories
+                        @foreach( $categories as $category)
+                        <li>
+                            <input type="checkbox" name="category_id[]" value="{{ $category->id }}" id="{{ $category->id }}" {{ in_array($category->id, $productCategories) ? 'checked' : '' }}>
+                            <label for="{{ $category->id }}">{{ $category->name}}</label>
+                        </li>
+                        @endforeach
 
                         <input type="submit" value="Submit">
 

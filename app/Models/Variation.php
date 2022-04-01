@@ -20,7 +20,6 @@ class Variation extends Model
     ];
 
     protected $with = [
-        // 'product',
         'size',
         'orientation'
     ];

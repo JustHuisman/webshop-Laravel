@@ -77,6 +77,24 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                            <label for="category">Categories (Hold ctrl for multiple!)</label><br>
+                                <select class="form-group" name="category_id[]" required multiple>
+                                    <option value=1>Sunset</option>
+                                    <option value=2>Animals</option>
+                                    <option value=3>Nature</option>
+                                    <option value=4>Space</option>
+                                    <option value=5>Sky</option>
+                                    <option value=6>Skyline</option>
+                                    <option value=7>City</option>
+                                    <option value=8>Holiday</option>
+                                    <option value=9>Beach</option>
+                                    <option value=10>Mountain</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <input type="submit" value="Submit">
 
                     </div>

@@ -157,13 +157,17 @@ class ProductsController extends Controller
         $product = Product::find($productId);
         $variation = Variation::find($variationId);
 
-        $categorymodel = Product_category::find($productId);
-        $categories = $data['category_id'];
-        $categorymodel->update($categories);
-        
-        
         $product->update($data);
         $variation->update($data);
+       
+        $categories = $data['category_id'];
+        Product_category::where('product_id', $product->id)->delete();
+        foreach ($categories as $index => $data['category_id']) {
+            Product_category::create([
+                'product_id'  => $product->id,
+                'category_id' => $categories[$index],
+            ]);
+        }
 
         return redirect()->route('admin-products.index')->with('success',
         'Product updated successfully');

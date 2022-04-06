@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
@@ -30,13 +29,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/products', [ProductController::class, 'fetchProducts']);
 
-Auth::routes();
-Route::middleware('auth')->prefix('admin')->group(function() {  //middleware is not used yet
-    Route::get('/', [AdminController::class, 'index'])->name('admin');
-    Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
-    Route::resource('users', UserController::class)->names('admin.users');
-});
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/tos', [HomeController::class, 'tos'])->name('tos');
 Route::get('/home/categories', [HomeController::class, 'categories'])->name('categories');
@@ -47,26 +39,29 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 Route::get('/return', [ReturnController::class, 'index'])->name('return');
 
-Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); //delete this line and put it to middleware later
+Auth::routes();
+Route::middleware('admin')->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-Route::get('/admin-products', [ProductsController::class, 'index'])->name('admin-products.index');
-Route::get('/admin-products/create', [ProductsController::class, 'create'])->name('admin-products.create');
-Route::post('/admin-products/store', [ProductsController::class, 'store'])->name('admin-products.store');
-Route::get('/admin-products/{id}', [ProductsController::class, 'variation'])->name('admin-products.variation');
-Route::get('/admin-products/{id}/variations/create', [ProductsController::class, 'createVariation'])->name('admin-products.createVariation');
-Route::post('/admin-products/{id}/variations/store', [ProductsController::class, 'storeVariation'])->name('admin-products.storeVariation');
-Route::get('/admin-products/{id}/variations/{variation}', [ProductsController::class, 'show'])->name('admin-products.show');
-Route::get('/admin-products/{id}/variations/{variation}/edit', [ProductsController::class, 'edit'])->name('admin-products.edit');
-Route::put('/admin-products/{id}/variations/{variation}/update', [ProductsController::class, 'update'])->name('admin-products.update');
-Route::get('/admin-products/{id}/variations/{variation}/destroy', [ProductsController::class, 'destroyVariation'])->name('admin-products.destroy');
-Route::get('/admin-products/{id}/destroy', [ProductsController::class, 'destroy'])->name('admin-products.destroy');
+    Route::resources([
+        'admin-users'   => UsersController::class,
+        'admin-returns' => ReturnsController::class
+    ]);
 
-Route::resources([
-    'admin-users'   => UsersController::class,
-    'admin-returns' => ReturnsController::class
-]);
-
-
+    Route::prefix('admin-products')->name('admin-products.')->controller(ProductsController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/{id}', 'variation')->name('variation');
+    Route::get('/{id}/variations/create', 'createVariation')->name('createVariation');
+    Route::post('/{id}/variations/store', 'storeVariation')->name('storeVariation');
+    Route::get('/{id}/variations/{variation}', 'show')->name('show');
+    Route::get('/{id}/variations/{variation}/edit', 'edit')->name('edit');
+    Route::put('/{id}/variations/{variation}/update', 'update')->name('update');
+    Route::get('/{id}/variations/{variation}/destroy', 'destroyVariation')->name('destroy');
+    Route::get('/{id}/destroy', 'destroy')->name('destroy');
+    });
+});
 
 

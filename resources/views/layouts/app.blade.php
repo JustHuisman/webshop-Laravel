@@ -97,12 +97,15 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+
+                                    @if (Auth::user()->role == 1)
                                     <a class="dropdown-item" href="{{ url('/admin') }}">
                                         <div class="image-wrapper">
                                             <img class="navbar-img" src="images/icons/person-admin.svg" alt="Admin" width="32" height="32">
                                             <img class="navbar-img Hover" src="images/icons/person-admin.svg" alt="Admin" width="32" height="32">Admin
                                         </div>
                                     </a>
+                                    @endif
                                 </div>
                             </li>
                         @endguest

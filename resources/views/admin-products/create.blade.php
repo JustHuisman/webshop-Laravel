@@ -35,7 +35,7 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                             <label for="image">Image</label><br>
-                                <input type="file" name="image" placeholder="Image">
+                                <livewire:upload-photo />
                             </div>
                         </div>
 

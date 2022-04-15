@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -14,7 +15,21 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('admin-users.index');
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+
+        $users = User::paginate(10);
+        $userCount = User::count();
+        $lastpage = ceil($userCount / 10);
+        
+        return view('admin-users.index', [
+            'users'    => $users,
+            'page'     => $page,
+            'lastpage' => $lastpage
+        ]);
     }
 
     /**
@@ -24,7 +39,13 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::latest()->first();
+
+        return view('admin-users.create', [
+            'method'  => 'POST',
+            'user'    => $user,
+            'action'  => '/admin-users/store',   
+        ]);
     }
 
     /**
@@ -46,7 +67,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        // $users = User::where('email', '!=', '')->get();
     }
 
     /**

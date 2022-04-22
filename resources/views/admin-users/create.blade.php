@@ -21,7 +21,7 @@
                     {{ __('Create form:') }}
                 </div>
 
-                <form method="{{ $method }}" enctype="multipart/form-data" action="{{ $action }}">
+                <form method="{{ $method }}" enctype="multipart/form-data" action="{{ route($action) }}">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
 

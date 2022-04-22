@@ -44,7 +44,7 @@ class UsersController extends Controller
         return view('admin-users.create', [
             'method'  => 'POST',
             'user'    => $user,
-            'action'  => '/admin-users/store',   
+            'action'  => 'admin-users.store',   
         ]);
     }
 
@@ -56,7 +56,13 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User;
+        $user->first_name = $request->first_name;
+        // if ($user->save()) {
+        //     return view('admin-users.show', ['user' => $user]);
+        // }
+        return redirect()->route('admin-users.index')->with('success',
+        'User created successfully.');
     }
 
     /**
@@ -65,9 +71,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        // $users = User::where('email', '!=', '')->get();
+        $user = User::find($id);
+        return view('admin-users.show', compact('user'));
     }
 
     /**

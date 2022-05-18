@@ -21,19 +21,19 @@
                     {{ __('User details:') }}
                 </div>
                 <ul>
-                   <li> Name: {{ $user->first_name . ' ' . $user->last_name }} </li>
-                   <li> E-mail: {{ $user->email  }} </li>
-                   <li> Role: {{ $user->role  }} </li>
-                   <li> Name: {{ $user->password  }} </li>
+                    <li> Name: {{ $user->first_name . ' ' . $user->last_name }} </li>
+                    <li> E-mail: {{ $user->email }} </li>
+                    <li> Role: {{ $user->roles->name }} </li>
                 </ul>
             </div>
             <a href="/admin-users/{{$user->id}}/edit">
                 <button>Edit</button>
             </a>
-
-            <a href="/admin-users/{{$user->id}}/destroy">
-                <button class="btn btn-danger" style="width:150px;margin-top:0px">Delete user</button>
-            </a>
+            <form action="{{ route('admin-users.destroy', $user->id)}}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-danger" type="submit" style="width:150px">Delete user</button>
+            </form>
         </div>
     </div>
 </div>
